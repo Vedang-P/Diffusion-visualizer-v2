@@ -7,6 +7,24 @@
 Diffulizer is a diffusion visualizer built around **Stable Diffusion XL (SDXL Base 1.0)**.
 It captures internal denoising traces (latents, predicted noise, cross/self-attention, token activations), serializes them into a static dataset, and renders them in a scroll-synchronized interactive viewer.
 
+### Diffusion evolution strip (noise to structure)
+
+![Diffusion timestep strip](assets/readme/diffusion_timestep_strip.png)
+
+### Latent trajectory in PCA space
+
+![Latent PCA trajectory](assets/readme/latent_trajectory_pca.png)
+
+### Core denoising metrics over timesteps
+
+![Denoising metrics](assets/readme/denoising_metrics.png)
+
+### Token dominance (top activated prompt tokens)
+
+![Token dominance](assets/readme/token_dominance.png)
+
+---
+
 ## What This Project Contains
 
 - `data-generator/`: offline SD/SDXL instrumentation pipeline that exports reproducible artifacts per timestep.
@@ -136,26 +154,6 @@ Core stepwise analytic channels:
 
 ---
 
-## Visuals
-
-### Diffusion evolution strip (noise to structure)
-
-![Diffusion timestep strip](assets/readme/diffusion_timestep_strip.png)
-
-### Latent trajectory in PCA space
-
-![Latent PCA trajectory](assets/readme/latent_trajectory_pca.png)
-
-### Core denoising metrics over timesteps
-
-![Denoising metrics](assets/readme/denoising_metrics.png)
-
-### Token dominance (top activated prompt tokens)
-
-![Token dominance](assets/readme/token_dominance.png)
-
----
-
 ## Reproducible Setup
 
 ### 1) Prerequisites
@@ -267,5 +265,4 @@ The viewer sanitizes invalid JSON numeric tokens during load:
 Missing values render as gaps/empty points rather than crashing the app, preserving trace continuity under imperfect exports.
 
 ---
-
 
