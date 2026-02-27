@@ -7,7 +7,7 @@ const TERMINOLOGY_ITEMS = [
       'The step slider is a deterministic index selector over the precomputed denoising trajectory. Moving from step 0 toward the final step does not generate new samples in the browser; it selects a different state snapshot exported during the SDXL reverse process. Every plotted value in this panel (latent norm, noise norm, cosine drift, KL shift) is read from arrays at the same timestep index, so the image, line markers, and metric cards always remain causally synchronized.',
     equation: 's \\in \\{0,\\ldots,T\\} \\Rightarrow \\{x_s,\\hat{\\epsilon}_s,m_s\\}',
     equationNote:
-      'This notation says one selected step s maps to one latent state x_s, one predicted-noise state \\hat{\\epsilon}_s, and one metric bundle m_s. The slider is therefore a synchronized lookup operator, not a separate optimization process.'
+      'This notation means one selected step s maps to one latent state x_s, one predicted-noise estimate epsilon-hat_s, and one metric bundle m_s. The slider is therefore a synchronized lookup operator, not a separate optimization process.'
   },
   {
     term: 'Reverse Denoising Update',
@@ -15,7 +15,7 @@ const TERMINOLOGY_ITEMS = [
       'Diffusion sampling runs in reverse time: the model starts from noise and progressively removes uncertainty. At each timestep, UNet predicts the residual noise and the scheduler transforms x_t into x_{t-1}. In the visualizer, this is why early steps look globally noisy while later steps lock geometry, edges, and illumination; the slider simply exposes this reverse trajectory point-by-point.',
     equation: 'x_{t-1}=\\mathrm{SchedulerStep}\\left(x_t,\\epsilon_\\theta(x_t,t,c),t\\right)',
     equationNote:
-      'The term \\epsilon_\\theta(x_t,t,c) is the model noise estimate conditioned on prompt embeddings c. The scheduler then applies its timestep-specific coefficients to compute the previous latent.'
+      'The term epsilon_theta(x_t, t, c) is the model noise estimate conditioned on prompt embeddings c. The scheduler then applies timestep-specific coefficients to compute the previous latent.'
   },
   {
     term: 'Denoising Magnitude (Latent vs Noise)',
