@@ -1,10 +1,10 @@
-# Diffuliser
+# Diffulizer
 
 <p align="center">
-  <img src="assets/favicon.png" alt="Diffuliser" width="120" />
+  <img src="assets/favicon.png" alt="Diffulizer" width="120" />
 </p>
 
-Diffuliser is an interpretability-first diffusion inspection system built around **Stable Diffusion XL (SDXL Base 1.0)**.
+Diffulizer is an interpretability-first diffusion inspection system built around **Stable Diffusion XL (SDXL Base 1.0)**.
 It captures internal denoising traces (latents, predicted noise, cross/self-attention, token activations), serializes them into a static dataset, and renders them in a scroll-synchronized interactive viewer.
 
 The goal is to make the reverse diffusion process measurable and explainable, not just visually impressive.
@@ -26,7 +26,7 @@ A clean sample is progressively noised:
 x_t = sqrt(alpha_bar_t) * x_0 + sqrt(1 - alpha_bar_t) * epsilon,  epsilon ~ N(0, I)
 ```
 
-### 2) Reverse process (inference-time process inspected in Diffuliser)
+### 2) Reverse process (inference-time process inspected in Diffulizer)
 At each timestep `t`, UNet predicts noise and scheduler updates latent state:
 
 ```text
@@ -35,7 +35,7 @@ x_{t-1} = SchedulerStep(x_t, epsilon_theta, t)
 ```
 
 ### 3) Classifier-Free Guidance (CFG)
-Diffuliser exports with CFG when `cfg_scale > 1`:
+Diffulizer exports with CFG when `cfg_scale > 1`:
 
 ```text
 epsilon_cfg = epsilon_uncond + s * (epsilon_text - epsilon_uncond)
