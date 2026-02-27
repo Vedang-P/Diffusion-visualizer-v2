@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import BootScreenSection from './components/sections/BootScreenSection';
 import DiffusionPlaybackSection from './components/sections/DiffusionPlaybackSection';
 import MetricsScrubberSection from './components/sections/MetricsScrubberSection';
+import TerminologyTerminalSection from './components/sections/TerminologyTerminalSection';
+import FooterSection from './components/sections/FooterSection';
 import FlickeringGrid from './components/ui/FlickeringGrid';
 import { getPresetList } from './config/presets';
 import { cleanupDatasetResources, getImageSrc, loadPresetDataset } from './utils/datasetLoader';
@@ -264,6 +266,8 @@ export default function App() {
           realisticDataset={traceA}
           animeDataset={traceB}
         />
+        <TerminologyTerminalSection />
+        <FooterSection />
       </main>
     </>
   );

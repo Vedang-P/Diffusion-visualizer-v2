@@ -1,7 +1,7 @@
 export default function FooterSection() {
   return (
     <footer className="footer-section">
-      <a href="https://github.com/Vedang-p" target="_blank" rel="noreferrer noopener" className="footer-link">
+      <a href="https://github.com/Vedang-P" target="_blank" rel="noreferrer noopener" className="footer-link">
         <span>made by Vedang</span>
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path

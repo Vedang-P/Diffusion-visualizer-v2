@@ -862,6 +862,150 @@ body::-webkit-scrollbar,
   background: linear-gradient(90deg, rgba(176, 195, 239, 0.38), rgba(198, 217, 255, 0.84));
 }
 
+.section-terminology {
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+}
+
+.terminology-shell {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(8, 12, 20, 0.96);
+  box-shadow: 0 18px 34px rgba(0, 0, 0, 0.34);
+}
+
+.terminology-terminal-bar {
+  height: 42px;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.72rem;
+  padding: 0 0.86rem;
+  background: rgba(10, 15, 24, 0.95);
+}
+
+.terminology-terminal-bar p {
+  margin: 0;
+  text-align: center;
+  color: #9aacca;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: lowercase;
+}
+
+.terminology-terminal-body {
+  padding: 1rem 1rem 1.1rem;
+  background:
+    linear-gradient(180deg, rgba(8, 12, 20, 0.92), rgba(7, 10, 17, 0.98)),
+    radial-gradient(circle at 74% 0%, rgba(53, 82, 140, 0.08), transparent 42%);
+}
+
+.terminology-header {
+  text-align: center;
+  margin-bottom: 0.82rem;
+}
+
+.terminology-header h2 {
+  margin: 0;
+  font-size: clamp(1.22rem, 2.35vw, 1.9rem);
+  font-weight: 560;
+  letter-spacing: 0.01em;
+}
+
+.terminology-header p {
+  margin: 0.48rem auto 0;
+  width: min(900px, 100%);
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.terminology-grid {
+  border-top: 1px solid rgba(177, 198, 235, 0.2);
+}
+
+.terminology-item {
+  display: grid;
+  grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+  gap: 0.62rem 0.9rem;
+  padding: 0.8rem 0.18rem;
+  border-bottom: 1px solid rgba(177, 198, 235, 0.14);
+}
+
+.terminology-term {
+  align-self: center;
+  color: #e6eeff;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.terminology-meaning {
+  align-self: center;
+  color: #c8d3e9;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.terminology-equation {
+  grid-column: 1 / -1;
+  display: grid;
+  place-items: center;
+  margin-top: 0.1rem;
+  padding-top: 0.56rem;
+  border-top: 1px dashed rgba(177, 198, 235, 0.18);
+}
+
+.terminology-equation .katex-display {
+  margin: 0.18rem 0 0.05rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  text-align: center;
+}
+
+.terminology-equation .katex {
+  font-size: 1.05rem;
+  color: #dce7ff;
+}
+
+.footer-section {
+  width: min(1180px, 100%);
+  margin: 0.8rem auto 0;
+  padding: 1rem 0 1.8rem;
+  display: grid;
+  place-items: center;
+}
+
+.footer-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #c9d8f5;
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  transition: color 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #eef4ff;
+}
+
+.footer-link svg {
+  width: 1rem;
+  height: 1rem;
+}
+
 @keyframes glitch-layer-a {
   0%,
   88%,
@@ -1031,6 +1175,24 @@ body::-webkit-scrollbar,
 
   .trend-plot-svg {
     height: 110px;
+  }
+
+  .terminology-terminal-body {
+    padding: 0.84rem 0.8rem 0.9rem;
+  }
+
+  .terminology-item {
+    grid-template-columns: minmax(146px, 210px) minmax(0, 1fr);
+    gap: 0.5rem 0.72rem;
+    padding: 0.7rem 0.08rem;
+  }
+
+  .terminology-meaning {
+    font-size: 0.86rem;
+  }
+
+  .terminology-equation .katex {
+    font-size: 0.95rem;
   }
 }
 
@@ -1206,6 +1368,74 @@ body::-webkit-scrollbar,
   .metric-value {
     font-size: 0.82rem;
   }
+
+  .section-terminology {
+    gap: 0.7rem;
+  }
+
+  .terminology-shell {
+    border-radius: 9px;
+  }
+
+  .terminology-terminal-bar {
+    height: 36px;
+    padding: 0 0.56rem;
+    gap: 0.5rem;
+  }
+
+  .terminology-terminal-bar p {
+    font-size: 0.62rem;
+  }
+
+  .terminology-terminal-body {
+    padding: 0.66rem 0.58rem 0.74rem;
+  }
+
+  .terminology-header h2 {
+    font-size: clamp(1.08rem, 5.8vw, 1.42rem);
+  }
+
+  .terminology-header p {
+    font-size: 0.82rem;
+    line-height: 1.42;
+  }
+
+  .terminology-item {
+    grid-template-columns: 1fr;
+    gap: 0.32rem;
+    padding: 0.62rem 0;
+  }
+
+  .terminology-term {
+    font-size: 0.68rem;
+  }
+
+  .terminology-meaning {
+    font-size: 0.8rem;
+  }
+
+  .terminology-equation {
+    padding-top: 0.42rem;
+  }
+
+  .terminology-equation .katex {
+    font-size: 0.82rem;
+  }
+
+  .footer-section {
+    margin-top: 0.4rem;
+    padding: 0.8rem 0 1.2rem;
+  }
+
+  .footer-link {
+    font-size: 0.72rem;
+    gap: 0.42rem;
+  }
+
+  .footer-link svg {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
 }
 
 @media (max-width: 460px) {
@@ -1250,5 +1480,21 @@ body::-webkit-scrollbar,
 
   .trend-plot-svg {
     height: 86px;
+  }
+
+  .terminology-terminal-body {
+    padding: 0.58rem 0.46rem 0.64rem;
+  }
+
+  .terminology-term {
+    font-size: 0.64rem;
+  }
+
+  .terminology-meaning {
+    font-size: 0.76rem;
+  }
+
+  .terminology-equation .katex {
+    font-size: 0.74rem;
   }
 }
