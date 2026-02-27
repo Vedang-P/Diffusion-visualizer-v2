@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/diffusion-visualizer/schema.json",
+  "title": "Static Diffusion Visualizer Dataset",
+  "type": "object",
+  "required": ["metadata", "metrics", "latent_pca"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "generator",
+        "prompt",
+        "steps",
+        "timesteps",
+        "images",
+        "layers",
+        "attention_files"
+      ],
+      "properties": {
+        "schema_version": { "type": "string" },
+        "generator": { "type": "object" },
+        "prompt": {
+          "type": "object",
+          "required": ["text", "tokens", "token_ids"],
+          "properties": {
+            "text": { "type": "string" },
+            "negative": { "type": "string" },
+            "tokens": { "type": "array", "items": { "type": "string" } },
+            "token_ids": { "type": "array", "items": { "type": "integer" } }
+          }
+        },
+        "steps": { "type": "integer", "minimum": 1 },
+        "timesteps": { "type": "array", "items": { "type": "integer" } },
+        "images": { "type": "array", "items": { "type": "string" } },
+        "layers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "processor_key", "attention_type"],
+            "properties": {
+              "id": { "type": "string" },
+              "processor_key": { "type": "string" },
+              "attention_type": { "type": "string", "enum": ["cross", "self"] }
+            }
+          }
+        },
+        "attention_files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["step", "layer_id", "attention_type", "path", "shape", "dtype"],
+            "properties": {
+              "step": { "type": "integer" },
+              "layer_id": { "type": "string" },
+              "attention_type": { "type": "string", "enum": ["cross", "self"] },
+              "path": { "type": "string" },
+              "shape": {
+                "type": "array",
+                "items": { "type": "integer", "minimum": 1 },
+                "minItems": 2,
+                "maxItems": 3
+              },
+              "dtype": { "type": "string", "enum": ["float16"] }
+            }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": [
+        "latent_l2_norm",
+        "predicted_noise_l2_norm",
+        "cosine_similarity_to_previous",
+        "cross_attention_entropy",
+        "self_attention_entropy",
+        "mean_token_activation",
+        "token_dominance",
+        "shape_validation"
+      ]
+    },
+    "latent_pca": {
+      "type": "object",
+      "required": ["points", "explained_variance_ratio"],
+      "properties": {
+        "points": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": { "type": "number" },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "explained_variance_ratio": {
+          "type": "array",
+          "items": { "type": "number" },
+          "minItems": 2,
+          "maxItems": 2
+        }
+      }
+    }
+  }
+}
