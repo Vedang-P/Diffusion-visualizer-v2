@@ -17,6 +17,7 @@ function trimSlash(url) {
 
 export default function LocalGenerationPanel({ onDatasetLoaded }) {
   const [bridgeUrl, setBridgeUrl] = useState(DEFAULT_BRIDGE_URL);
+  const [modelId, setModelId] = useState('stabilityai/stable-diffusion-xl-base-1.0');
   const [prompt, setPrompt] = useState('a glass teapot on a wooden table, studio lighting');
   const [negativePrompt, setNegativePrompt] = useState('blurry, low quality');
   const [cfgScale, setCfgScale] = useState(7.5);
@@ -51,6 +52,7 @@ export default function LocalGenerationPanel({ onDatasetLoaded }) {
         body: JSON.stringify({
           prompt: prompt.trim(),
           negative_prompt: negativePrompt.trim(),
+          model_id: modelId.trim() || 'stabilityai/stable-diffusion-xl-base-1.0',
           cfg_scale: clampNumber(cfgScale, 7.5, 1, 20),
           num_steps: clampNumber(numSteps, 30, 1, 120),
           max_layers: clampNumber(maxLayers, 12, 1, 64),
@@ -162,6 +164,14 @@ export default function LocalGenerationPanel({ onDatasetLoaded }) {
         <label>
           Output Name
           <input value={outputName} onChange={(event) => setOutputName(event.target.value)} placeholder="example_run" />
+        </label>
+        <label className="full">
+          Model ID
+          <input
+            value={modelId}
+            onChange={(event) => setModelId(event.target.value)}
+            placeholder="stabilityai/stable-diffusion-xl-base-1.0"
+          />
         </label>
         <label className="full">
           Prompt

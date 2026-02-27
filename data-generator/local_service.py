@@ -38,6 +38,7 @@ def safe_output_name(name: str) -> str:
 class GenerateRequest(BaseModel):
     prompt: str = Field(..., min_length=1, max_length=400)
     negative_prompt: str = Field(default="", max_length=400)
+    model_id: str = Field(default="stabilityai/stable-diffusion-xl-base-1.0", min_length=1, max_length=200)
     cfg_scale: float = Field(default=7.5, ge=1.0, le=20.0)
     num_steps: int = Field(default=30, ge=1, le=120)
     max_layers: int = Field(default=12, ge=1, le=64)
@@ -191,6 +192,8 @@ def create_job(payload: GenerateRequest) -> dict[str, Any]:
         payload.prompt,
         "--negative-prompt",
         payload.negative_prompt,
+        "--model-id",
+        payload.model_id,
         "--cfg-scale",
         str(payload.cfg_scale),
         "--num-steps",

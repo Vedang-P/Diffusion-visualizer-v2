@@ -27,7 +27,7 @@ Production-ready two-part system for diffusion interpretability using **precompu
 ## 2. Core Capabilities
 
 ### Offline generator
-- Runs Stable Diffusion locally (`diffusers`)
+- Runs Stable Diffusion locally (`diffusers`) with SD 1.x/2.x and SDXL support
 - Hooks UNet cross/self attention processors
 - Captures per-step:
   - latent tensors
@@ -73,6 +73,7 @@ pip install -r requirements.txt
 python3 generate.py \
   --prompt "a glass teapot on a wooden table, studio lighting" \
   --negative-prompt "blurry, low quality" \
+  --model-id "stabilityai/stable-diffusion-xl-base-1.0" \
   --cfg-scale 7.5 \
   --num-steps 30 \
   --attention-resolution 32 \
@@ -86,6 +87,9 @@ Validate exported dataset:
 ```bash
 python3 validate_dataset.py dataset/example_run --strict
 ```
+
+Default model is `stabilityai/stable-diffusion-xl-base-1.0`. For lower VRAM, you can use SD 1.5 with:
+`--model-id runwayml/stable-diffusion-v1-5 --pipeline-type sd`
 
 ### B) Run visualizer
 
@@ -121,6 +125,8 @@ Then open the visualizer and use **Local Generator Bridge**:
 | --- | --- |
 | `--prompt` | Required text prompt |
 | `--negative-prompt` | Negative prompt for CFG |
+| `--model-id` | Hugging Face model id (defaults to SDXL base) |
+| `--pipeline-type auto|sd|sdxl` | Pipeline family selector (auto infers from model id) |
 | `--cfg-scale` | Classifier-free guidance scale |
 | `--num-steps` | Diffusion timesteps |
 | `--layers` | Glob patterns for attention processors |

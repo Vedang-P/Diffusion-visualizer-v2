@@ -4,11 +4,11 @@ import argparse
 import json
 import shutil
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 import torch
-from diffusers import StableDiffusionPipeline
+from diffusers import StableDiffusionPipeline, StableDiffusionXLPipeline
 from tqdm import tqdm
 
 from compression.serializer import DatasetSerializer
@@ -26,7 +26,14 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate static diffusion interpretability dataset.")
     parser.add_argument("--prompt", type=str, required=True)
     parser.add_argument("--negative-prompt", type=str, default="")
-    parser.add_argument("--model-id", type=str, default="runwayml/stable-diffusion-v1-5")
+    parser.add_argument("--model-id", type=str, default="stabilityai/stable-diffusion-xl-base-1.0")
+    parser.add_argument(
+        "--pipeline-type",
+        type=str,
+        choices=["auto", "sd", "sdxl"],
+        default="auto",
+        help="Pipeline family. 'auto' infers SDXL when model id contains 'xl'.",
+    )
     parser.add_argument("--output-dir", type=str, default="dataset")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--cfg-scale", type=float, default=7.5)
@@ -109,20 +116,63 @@ def to_timestep_int(timestep: Any) -> int:
     return int(timestep)
 
 
-def decode_latents_to_pil(pipe: StableDiffusionPipeline, latents: torch.Tensor):
+def infer_pipeline_type(model_id: str, requested: str) -> Literal["sd", "sdxl"]:
+    if requested in {"sd", "sdxl"}:
+        return requested
+
+    model_key = model_id.lower()
+    if "sdxl" in model_key or "stable-diffusion-xl" in model_key:
+        return "sdxl"
+    return "sd"
+
+
+def load_pipeline(
+    model_id: str,
+    pipeline_type: Literal["sd", "sdxl"],
+    dtype: torch.dtype,
+):
+    if pipeline_type == "sdxl":
+        return StableDiffusionXLPipeline.from_pretrained(
+            model_id,
+            torch_dtype=dtype,
+        )
+
+    return StableDiffusionPipeline.from_pretrained(
+        model_id,
+        torch_dtype=dtype,
+        safety_checker=None,
+        requires_safety_checker=False,
+    )
+
+
+def decode_latents_to_pil(pipe, latents: torch.Tensor):
     scaling = pipe.vae.config.scaling_factor
+    needs_upcast = bool(getattr(pipe.vae.config, "force_upcast", False) and pipe.vae.dtype == torch.float16)
+
+    original_vae_dtype = pipe.vae.dtype
+    if needs_upcast and hasattr(pipe, "upcast_vae"):
+        pipe.upcast_vae()
+        latents = latents.to(next(iter(pipe.vae.post_quant_conv.parameters())).dtype)
+
     with torch.no_grad():
         decoded = pipe.vae.decode(latents / scaling, return_dict=False)[0]
+
+    if needs_upcast:
+        pipe.vae.to(dtype=original_vae_dtype)
+
     image = pipe.image_processor.postprocess(decoded, output_type="pil")[0]
     return image
 
 
 def encode_prompt_embeddings(
-    pipe: StableDiffusionPipeline,
+    pipe,
     prompt: str,
     negative_prompt: str,
     do_cfg: bool,
     device: torch.device,
+    pipeline_type: Literal["sd", "sdxl"],
+    height: int,
+    width: int,
 ):
     out = pipe.encode_prompt(
         prompt=prompt,
@@ -132,25 +182,62 @@ def encode_prompt_embeddings(
         negative_prompt=negative_prompt,
     )
 
-    if not isinstance(out, tuple) or len(out) < 2:
-        raise RuntimeError("Unexpected encode_prompt output; expected prompt and negative prompt embeddings.")
+    if not isinstance(out, tuple):
+        raise RuntimeError("Unexpected encode_prompt output.")
+
+    if pipeline_type == "sd":
+        if len(out) < 2:
+            raise RuntimeError("Unexpected SD encode_prompt output; expected prompt and negative prompt embeddings.")
+
+        prompt_embeds, negative_prompt_embeds = out[0], out[1]
+        if do_cfg:
+            return torch.cat([negative_prompt_embeds, prompt_embeds], dim=0), None
+        return prompt_embeds, None
+
+    if len(out) < 4:
+        raise RuntimeError(
+            "Unexpected SDXL encode_prompt output; expected prompt, negative, pooled, and negative pooled embeddings."
+        )
 
     prompt_embeds, negative_prompt_embeds = out[0], out[1]
+    pooled_prompt_embeds, negative_pooled_prompt_embeds = out[2], out[3]
+
+    add_text_embeds = pooled_prompt_embeds
+    text_encoder_projection_dim = int(add_text_embeds.shape[-1])
+    if getattr(pipe, "text_encoder_2", None) is not None:
+        text_encoder_projection_dim = int(pipe.text_encoder_2.config.projection_dim)
+
+    add_time_ids = pipe._get_add_time_ids(  # noqa: SLF001 - diffusers does not expose a public equivalent.
+        original_size=(height, width),
+        crops_coords_top_left=(0, 0),
+        target_size=(height, width),
+        dtype=prompt_embeds.dtype,
+        text_encoder_projection_dim=text_encoder_projection_dim,
+    ).to(device=device)
+
+    negative_add_time_ids = add_time_ids
     if do_cfg:
-        return torch.cat([negative_prompt_embeds, prompt_embeds], dim=0)
-    return prompt_embeds
+        prompt_embeds = torch.cat([negative_prompt_embeds, prompt_embeds], dim=0)
+        add_text_embeds = torch.cat([negative_pooled_prompt_embeds, add_text_embeds], dim=0)
+        add_time_ids = torch.cat([negative_add_time_ids, add_time_ids], dim=0)
+
+    added_cond_kwargs = {
+        "text_embeds": add_text_embeds.to(device=device, dtype=prompt_embeds.dtype),
+        "time_ids": add_time_ids.to(device=device, dtype=prompt_embeds.dtype),
+    }
+    return prompt_embeds, added_cond_kwargs
 
 
-def build_tokens(pipe: StableDiffusionPipeline, prompt: str) -> tuple[list[str], list[int]]:
-    text_inputs = pipe.tokenizer(
+def build_tokens(tokenizer, prompt: str) -> tuple[list[str], list[int]]:
+    text_inputs = tokenizer(
         prompt,
         padding="max_length",
-        max_length=pipe.tokenizer.model_max_length,
+        max_length=tokenizer.model_max_length,
         truncation=True,
         return_tensors="pt",
     )
     ids = text_inputs.input_ids[0].tolist()
-    tokens = pipe.tokenizer.convert_ids_to_tokens(ids)
+    tokens = tokenizer.convert_ids_to_tokens(ids)
     return tokens, ids
 
 
@@ -314,12 +401,12 @@ def main() -> None:
         message="Preparing diffusion pipeline...",
     )
 
-    print(f"Loading pipeline: {args.model_id}")
-    pipe = StableDiffusionPipeline.from_pretrained(
-        args.model_id,
-        torch_dtype=dtype,
-        safety_checker=None,
-        requires_safety_checker=False,
+    pipeline_type = infer_pipeline_type(args.model_id, args.pipeline_type)
+    print(f"Loading pipeline ({pipeline_type}): {args.model_id}")
+    pipe = load_pipeline(
+        model_id=args.model_id,
+        pipeline_type=pipeline_type,
+        dtype=dtype,
     )
     pipe = pipe.to(device)
     pipe.set_progress_bar_config(disable=True)
@@ -330,16 +417,23 @@ def main() -> None:
     )
 
     do_cfg = args.cfg_scale > 1.0
-    prompt_embeds = encode_prompt_embeddings(
+    prompt_embeds, added_cond_kwargs = encode_prompt_embeddings(
         pipe=pipe,
         prompt=args.prompt,
         negative_prompt=args.negative_prompt,
         do_cfg=do_cfg,
         device=device,
+        pipeline_type=pipeline_type,
+        height=args.height,
+        width=args.width,
     )
 
-    tokens, token_ids = build_tokens(pipe, args.prompt)
-    special_ids = set(getattr(pipe.tokenizer, "all_special_ids", []) or [])
+    tokenizer = getattr(pipe, "tokenizer", None)
+    if tokenizer is None:
+        raise RuntimeError("Loaded pipeline does not expose a tokenizer required for token metadata export.")
+
+    tokens, token_ids = build_tokens(tokenizer, args.prompt)
+    special_ids = set(getattr(tokenizer, "all_special_ids", []) or [])
     meaningful_token_count = infer_meaningful_token_count(
         tokens=tokens,
         token_ids=token_ids,
@@ -382,6 +476,7 @@ def main() -> None:
     )
     generator = torch.Generator(device=device).manual_seed(args.seed)
     latents = torch.randn(latent_shape, generator=generator, device=device, dtype=dtype)
+    latents = latents * pipe.scheduler.init_noise_sigma
 
     serializer = DatasetSerializer(output_dir)
 
@@ -405,12 +500,18 @@ def main() -> None:
         latent_model_input = torch.cat([latents] * 2) if do_cfg else latents
         latent_model_input = pipe.scheduler.scale_model_input(latent_model_input, timestep)
 
+        unet_kwargs: dict[str, Any] = {
+            "encoder_hidden_states": prompt_embeds,
+            "return_dict": False,
+        }
+        if added_cond_kwargs is not None:
+            unet_kwargs["added_cond_kwargs"] = added_cond_kwargs
+
         with torch.no_grad():
             noise_pred = pipe.unet(
                 latent_model_input,
                 timestep,
-                encoder_hidden_states=prompt_embeds,
-                return_dict=False,
+                **unet_kwargs,
             )[0]
 
         if do_cfg:
@@ -515,6 +616,7 @@ def main() -> None:
         "schema_version": "1.0.0",
         "generator": {
             "model_id": args.model_id,
+            "pipeline_type": pipeline_type,
             "seed": args.seed,
             "cfg_scale": args.cfg_scale,
             "num_steps": args.num_steps,
