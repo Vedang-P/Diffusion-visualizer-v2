@@ -368,27 +368,43 @@ body::-webkit-scrollbar,
   z-index: 1;
 }
 
-.boot-tile-glitch {
+.boot-encrypted-layer {
   position: absolute;
   inset: 0.62rem 0.84rem;
-  pointer-events: none;
-  opacity: 0;
+  pointer-events: auto;
   z-index: 3;
-  color: rgba(198, 214, 246, 0.75);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
 }
 
-.boot-tile-glitch .katex {
-  font-size: inherit;
+.encrypted-text {
+  display: inline-block;
   white-space: nowrap;
 }
 
-.boot-tile-glitch-a {
-  text-shadow: -1px 0 0 rgba(174, 201, 255, 0.55);
+.boot-encrypted-text {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity 0.12s linear;
 }
 
-.boot-tile-glitch-b {
-  color: rgba(154, 181, 255, 0.55);
-  text-shadow: 1px 0 0 rgba(154, 181, 255, 0.55);
+.boot-encrypted-active {
+  color: rgba(203, 220, 255, 0.8);
+  opacity: 0.85;
+  text-shadow:
+    -1px 0 rgba(160, 197, 255, 0.44),
+    1px 0 rgba(107, 161, 255, 0.4),
+    0 0 8px rgba(93, 140, 225, 0.24);
+}
+
+.boot-encrypted-idle {
+  color: rgba(170, 194, 245, 0.1);
+  opacity: 0;
 }
 
 .boot-glitch-tile:hover {
@@ -401,12 +417,13 @@ body::-webkit-scrollbar,
   animation: boot-tile-scan 0.46s steps(2, end) 2;
 }
 
-.boot-glitch-tile:hover .boot-tile-glitch-a {
-  animation: boot-tile-ghost-a 0.44s steps(2, end) 2;
-}
-
-.boot-glitch-tile:hover .boot-tile-glitch-b {
-  animation: boot-tile-ghost-b 0.48s steps(2, end) 2;
+.boot-glitch-tile:hover .boot-encrypted-text {
+  color: rgba(211, 228, 255, 0.95);
+  opacity: 0.98;
+  text-shadow:
+    -1px 0 rgba(187, 214, 255, 0.68),
+    1px 0 rgba(119, 173, 255, 0.66),
+    0 0 10px rgba(86, 136, 225, 0.34);
 }
 
 .boot-glitch-variant-2:hover {
@@ -888,6 +905,10 @@ body::-webkit-scrollbar,
 
   .boot-tile-math {
     font-size: 0.92rem;
+  }
+
+  .boot-encrypted-text {
+    font-size: 0.66rem;
   }
 
   .boot-terminal-bar {

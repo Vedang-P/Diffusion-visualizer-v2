@@ -1,20 +1,22 @@
 import { InlineMath } from 'react-katex';
 import HyperText from '../ui/HyperText';
 import WebcamPixelGrid from '../ui/WebcamPixelGrid';
+import EncryptedText from '../ui/EncryptedText';
 
 const BOOT_EQUATIONS = [
-  { latex: 'x_t = \\sqrt{\\bar{\\alpha}_t}x_0 + \\sqrt{1-\\bar{\\alpha}_t}\\,\\epsilon', size: 'xl' },
-  { latex: 'q(x_t\\mid x_0)=\\mathcal{N}(\\sqrt{\\bar{\\alpha}_t}x_0,(1-\\bar{\\alpha}_t)I)', size: 'xl' },
-  { latex: 'p_\\theta(x_{t-1}\\mid x_t)=\\mathcal{N}(\\mu_\\theta(x_t,t),\\sigma_t^2 I)', size: 'l' },
+  { latex: 'x_t = \\sqrt{\\bar{\\alpha}_t}x_0 + \\sqrt{1-\\bar{\\alpha}_t}\\,\\epsilon', encrypted: 'x_t = sqrt(a_t) x_0 + sqrt(1-a_t) e', size: 'xl' },
+  { latex: 'q(x_t\\mid x_0)=\\mathcal{N}(\\sqrt{\\bar{\\alpha}_t}x_0,(1-\\bar{\\alpha}_t)I)', encrypted: 'q(x_t|x_0) = N(sqrt(a_t)x_0, (1-a_t)I)', size: 'xl' },
+  { latex: 'p_\\theta(x_{t-1}\\mid x_t)=\\mathcal{N}(\\mu_\\theta(x_t,t),\\sigma_t^2 I)', encrypted: 'p_theta(x_t-1|x_t)=N(mu_theta(x_t,t),sigma_t^2 I)', size: 'l' },
   {
     latex:
       '\\mu_\\theta(x_t,t)=\\frac{1}{\\sqrt{\\alpha_t}}\\left(x_t-\\frac{1-\\alpha_t}{\\sqrt{1-\\bar{\\alpha}_t}}\\epsilon_\\theta(x_t,t)\\right)',
+    encrypted: 'mu_theta=1/sqrt(a_t) * (x_t-((1-a_t)/sqrt(1-a_bar_t))*e_theta)',
     size: 'xxl'
   },
-  { latex: '\\hat{x}_0=\\frac{x_t-\\sqrt{1-\\bar{\\alpha}_t}\\,\\epsilon_\\theta(x_t,t)}{\\sqrt{\\bar{\\alpha}_t}}', size: 'xl' },
-  { latex: 'L_{\\text{simple}}=\\mathbb{E}_{t,x_0,\\epsilon}\\left[\\lVert\\epsilon-\\epsilon_\\theta(x_t,t)\\rVert_2^2\\right]', size: 'l' },
-  { latex: 'A=\\operatorname{softmax}\\!\\left(\\frac{QK^\\top}{\\sqrt{d}}\\right)V', size: 'm' },
-  { latex: 't:T\\rightarrow 0', size: 's' }
+  { latex: '\\hat{x}_0=\\frac{x_t-\\sqrt{1-\\bar{\\alpha}_t}\\,\\epsilon_\\theta(x_t,t)}{\\sqrt{\\bar{\\alpha}_t}}', encrypted: 'x0_hat=(x_t-sqrt(1-a_bar_t)*e_theta)/sqrt(a_bar_t)', size: 'xl' },
+  { latex: 'L_{\\text{simple}}=\\mathbb{E}_{t,x_0,\\epsilon}\\left[\\lVert\\epsilon-\\epsilon_\\theta(x_t,t)\\rVert_2^2\\right]', encrypted: 'L_simple = E[ ||e - e_theta(x_t,t)||^2 ]', size: 'l' },
+  { latex: 'A=\\operatorname{softmax}\\!\\left(\\frac{QK^\\top}{\\sqrt{d}}\\right)V', encrypted: 'A = softmax((QK^T)/sqrt(d))V', size: 'm' },
+  { latex: 't:T\\rightarrow 0', encrypted: 't: T -> 0', size: 's' }
 ];
 
 export default function BootScreenSection() {
@@ -63,11 +65,15 @@ export default function BootScreenSection() {
                     <div className="boot-tile-math">
                       <InlineMath math={item.latex} />
                     </div>
-                    <div className="boot-tile-glitch boot-tile-glitch-a" aria-hidden>
-                      <InlineMath math={item.latex} />
-                    </div>
-                    <div className="boot-tile-glitch boot-tile-glitch-b" aria-hidden>
-                      <InlineMath math={item.latex} />
+                    <div className="boot-encrypted-layer" aria-hidden>
+                      <EncryptedText
+                        text={item.encrypted}
+                        encryptedClassName="boot-encrypted-text boot-encrypted-active"
+                        revealedClassName="boot-encrypted-text boot-encrypted-idle"
+                        revealDelayMs={24}
+                        loopIntervalMs={0}
+                        playOnMount={false}
+                      />
                     </div>
                   </article>
                 ))}
@@ -78,11 +84,15 @@ export default function BootScreenSection() {
                     <div className="boot-tile-math">
                       <InlineMath math={item.latex} />
                     </div>
-                    <div className="boot-tile-glitch boot-tile-glitch-a" aria-hidden>
-                      <InlineMath math={item.latex} />
-                    </div>
-                    <div className="boot-tile-glitch boot-tile-glitch-b" aria-hidden>
-                      <InlineMath math={item.latex} />
+                    <div className="boot-encrypted-layer" aria-hidden>
+                      <EncryptedText
+                        text={item.encrypted}
+                        encryptedClassName="boot-encrypted-text boot-encrypted-active"
+                        revealedClassName="boot-encrypted-text boot-encrypted-idle"
+                        revealDelayMs={24}
+                        loopIntervalMs={0}
+                        playOnMount={false}
+                      />
                     </div>
                   </article>
                 ))}
