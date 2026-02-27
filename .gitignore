@@ -8,3 +8,4 @@ dist/
 *.log
 data-generator/dataset/
 data-generator/outputs/runtime_progress/
+results/

@@ -1,0 +1,10 @@
+{
+  "attention_assets": {
+    "checked_files": 144,
+    "errors": [],
+    "passed": true
+  },
+  "metadata_has_required_keys": true,
+  "metrics_steps_match": true,
+  "pca_points_match_steps": true
+}

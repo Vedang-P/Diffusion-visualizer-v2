@@ -1,3 +1,6 @@
+import { DATASET_REGISTRY } from '../config/presets';
+import { parseJsonWithSanitization } from './safeJson';
+
 const REQUIRED_METADATA_KEYS = ['schema_version', 'prompt', 'steps', 'images', 'layers', 'attention_files'];
 const ATTENTION_BUFFER_CACHE_LIMIT = 80;
 
@@ -16,6 +19,50 @@ function normalizePath(value) {
   return String(value || '')
     .replace(/^\.\//, '')
     .replace(/\\/g, '/');
+}
+
+function toFiniteOrNull(value) {
+  return Number.isFinite(value) ? value : null;
+}
+
+function sanitizeNumberArray(values) {
+  return (values || []).map((value) => toFiniteOrNull(value));
+}
+
+function sanitizeAttentionEntropy(items) {
+  return (items || []).map((item) => {
+    if (!item || typeof item !== 'object') {
+      return { step: null, mean: null, by_layer: {} };
+    }
+
+    const byLayer = {};
+    for (const [key, value] of Object.entries(item.by_layer || {})) {
+      byLayer[key] = toFiniteOrNull(value);
+    }
+
+    return {
+      ...item,
+      mean: toFiniteOrNull(item.mean),
+      by_layer: byLayer
+    };
+  });
+}
+
+function sanitizeTokenActivations(items) {
+  return (items || []).map((row) => sanitizeNumberArray(row));
+}
+
+function sanitizeMetrics(metrics) {
+  return {
+    ...metrics,
+    latent_l2_norm: sanitizeNumberArray(metrics.latent_l2_norm),
+    predicted_noise_l2_norm: sanitizeNumberArray(metrics.predicted_noise_l2_norm),
+    cosine_similarity_to_previous: sanitizeNumberArray(metrics.cosine_similarity_to_previous),
+    attention_kl_divergence: sanitizeNumberArray(metrics.attention_kl_divergence),
+    cross_attention_entropy: sanitizeAttentionEntropy(metrics.cross_attention_entropy),
+    self_attention_entropy: sanitizeAttentionEntropy(metrics.self_attention_entropy),
+    mean_token_activation: sanitizeTokenActivations(metrics.mean_token_activation)
+  };
 }
 
 function buildAttentionLookup(metadata) {
@@ -79,52 +126,9 @@ async function fetchJson(url) {
   if (!response.ok) {
     throw new Error(`Failed to fetch ${url} (${response.status})`);
   }
-  return response.json();
-}
 
-function readFileAsText(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error(`Failed to read file: ${file.name}`));
-    reader.onload = () => resolve(String(reader.result));
-    reader.readAsText(file);
-  });
-}
-
-function readFileAsArrayBuffer(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error(`Failed to read binary file: ${file.name}`));
-    reader.onload = () => resolve(reader.result);
-    reader.readAsArrayBuffer(file);
-  });
-}
-
-function makeLocalFileMap(files) {
-  const map = new Map();
-  for (const file of files) {
-    const rel = normalizePath(file.webkitRelativePath || file.name);
-    map.set(rel, file);
-
-    const parts = rel.split('/');
-    if (parts.length > 1) {
-      map.set(parts.slice(1).join('/'), file);
-    }
-  }
-  return map;
-}
-
-function resolveLocalFile(fileMap, path) {
-  const normalized = normalizePath(path);
-  if (fileMap.has(normalized)) {
-    return fileMap.get(normalized);
-  }
-  for (const [candidate, file] of fileMap.entries()) {
-    if (candidate.endsWith(normalized)) {
-      return file;
-    }
-  }
-  return null;
+  const text = await response.text();
+  return parseJsonWithSanitization(text, url);
 }
 
 function createDatasetObject(base) {
@@ -143,7 +147,7 @@ export async function loadDatasetFromUrl(baseUrl) {
   const metadata = await fetchJson(`${normalizedBase}/metadata.json`);
   assertMetadataShape(metadata);
 
-  const metrics = await fetchJson(`${normalizedBase}/metrics.json`);
+  const metrics = sanitizeMetrics(await fetchJson(`${normalizedBase}/metrics.json`));
   const latentPca = await fetchJson(`${normalizedBase}/latent_pca.json`);
   const warnings = validateDatasetBundle(metadata, metrics, latentPca);
 
@@ -157,40 +161,17 @@ export async function loadDatasetFromUrl(baseUrl) {
   });
 }
 
-export async function loadDatasetFromFiles(fileList) {
-  const files = Array.from(fileList);
-  const fileMap = makeLocalFileMap(files);
-
-  const metadataFile =
-    resolveLocalFile(fileMap, 'metadata.json') ||
-    files.find((file) => file.name === 'metadata.json');
-
-  if (!metadataFile) {
-    throw new Error('Could not find metadata.json in selected folder.');
+export async function loadPresetDataset(presetId) {
+  const preset = DATASET_REGISTRY[presetId];
+  if (!preset) {
+    throw new Error(`Unknown preset id: ${String(presetId)}`);
   }
 
-  const metadata = JSON.parse(await readFileAsText(metadataFile));
-  assertMetadataShape(metadata);
-
-  const metricsFile = resolveLocalFile(fileMap, metadata.artifacts?.metrics || 'metrics.json');
-  const pcaFile = resolveLocalFile(fileMap, metadata.artifacts?.latent_pca || 'latent_pca.json');
-
-  if (!metricsFile || !pcaFile) {
-    throw new Error('Selected folder is missing metrics.json or latent_pca.json.');
-  }
-
-  const metrics = JSON.parse(await readFileAsText(metricsFile));
-  const latentPca = JSON.parse(await readFileAsText(pcaFile));
-  const warnings = validateDatasetBundle(metadata, metrics, latentPca);
-
-  return createDatasetObject({
-    mode: 'local',
-    fileMap,
-    metadata,
-    metrics,
-    latentPca,
-    warnings
-  });
+  const dataset = await loadDatasetFromUrl(preset.baseUrl);
+  return {
+    ...dataset,
+    preset
+  };
 }
 
 export function getAttentionEntry(dataset, attentionType, layerId, step) {
@@ -203,20 +184,11 @@ export async function getAttentionBuffer(dataset, path) {
     return dataset.attentionBufferCache.get(normalizedPath);
   }
 
-  let buffer;
-  if (dataset.mode === 'url') {
-    const response = await fetch(`${dataset.baseUrl}/${normalizedPath}`, { cache: 'force-cache' });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch attention asset: ${normalizedPath}`);
-    }
-    buffer = await response.arrayBuffer();
-  } else {
-    const file = resolveLocalFile(dataset.fileMap, normalizedPath);
-    if (!file) {
-      throw new Error(`Attention file not found in local dataset: ${normalizedPath}`);
-    }
-    buffer = await readFileAsArrayBuffer(file);
+  const response = await fetch(`${dataset.baseUrl}/${normalizedPath}`, { cache: 'force-cache' });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch attention asset: ${normalizedPath}`);
   }
+  const buffer = await response.arrayBuffer();
 
   setCacheWithLimit(dataset.attentionBufferCache, normalizedPath, buffer, ATTENTION_BUFFER_CACHE_LIMIT);
   return buffer;
@@ -228,23 +200,7 @@ export function getImageSrc(dataset, step) {
     return null;
   }
 
-  if (dataset.mode === 'url') {
-    return `${dataset.baseUrl}/${normalizePath(path)}`;
-  }
-
-  const normalizedPath = normalizePath(path);
-  if (dataset.imageUrlCache.has(normalizedPath)) {
-    return dataset.imageUrlCache.get(normalizedPath);
-  }
-
-  const file = resolveLocalFile(dataset.fileMap, normalizedPath);
-  if (!file) {
-    return null;
-  }
-
-  const objectUrl = URL.createObjectURL(file);
-  dataset.imageUrlCache.set(normalizedPath, objectUrl);
-  return objectUrl;
+  return `${dataset.baseUrl}/${normalizePath(path)}`;
 }
 
 export function getCrossLayerIds(dataset) {
@@ -253,19 +209,11 @@ export function getCrossLayerIds(dataset) {
     .map((layer) => layer.id);
 }
 
-export function getSelfLayerIds(dataset) {
-  return (dataset.metadata.layers || [])
-    .filter((layer) => layer.attention_type === 'self')
-    .map((layer) => layer.id);
-}
-
 export function cleanupDatasetResources(dataset) {
   if (!dataset) {
     return;
   }
-  for (const [, url] of dataset.imageUrlCache || new Map()) {
-    URL.revokeObjectURL(url);
-  }
+
   if (dataset.imageUrlCache) {
     dataset.imageUrlCache.clear();
   }

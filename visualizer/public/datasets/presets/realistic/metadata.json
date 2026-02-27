@@ -1,0 +1,1934 @@
+{
+  "artifacts": {
+    "latent_pca": "latent_pca.json",
+    "latents_noise": null,
+    "metrics": "metrics.json"
+  },
+  "attention_files": [
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_000.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 0
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_000.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 0
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_000.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 0
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_000.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 0
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_000.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 0
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_000.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 0
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_001.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 1
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_001.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 1
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_001.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 1
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_001.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 1
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_001.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 1
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_001.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 1
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_002.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 2
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_002.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 2
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_002.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 2
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_002.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 2
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_002.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 2
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_002.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 2
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_003.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 3
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_003.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 3
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_003.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 3
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_003.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 3
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_003.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 3
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_003.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 3
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_004.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 4
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_004.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 4
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_004.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 4
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_004.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 4
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_004.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 4
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_004.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 4
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_005.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 5
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_005.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 5
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_005.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 5
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_005.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 5
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_005.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 5
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_005.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 5
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_006.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 6
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_006.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 6
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_006.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 6
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_006.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 6
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_006.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 6
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_006.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 6
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_007.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 7
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_007.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 7
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_007.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 7
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_007.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 7
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_007.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 7
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_007.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 7
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_008.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 8
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_008.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 8
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_008.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 8
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_008.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 8
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_008.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 8
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_008.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 8
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_009.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 9
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_009.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 9
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_009.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 9
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_009.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 9
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_009.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 9
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_009.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 9
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_010.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 10
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_010.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 10
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_010.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 10
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_010.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 10
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_010.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 10
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_010.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 10
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_011.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 11
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_011.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 11
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_011.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 11
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_011.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 11
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_011.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 11
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_011.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 11
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_012.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 12
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_012.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 12
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_012.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 12
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_012.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 12
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_012.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 12
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_012.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 12
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_013.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 13
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_013.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 13
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_013.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 13
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_013.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 13
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_013.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 13
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_013.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 13
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_014.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 14
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_014.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 14
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_014.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 14
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_014.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 14
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_014.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 14
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_014.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 14
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_015.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 15
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_015.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 15
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_015.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 15
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_015.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 15
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_015.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 15
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_015.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 15
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_016.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 16
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_016.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 16
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_016.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 16
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_016.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 16
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_016.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 16
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_016.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 16
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_017.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 17
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_017.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 17
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_017.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 17
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_017.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 17
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_017.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 17
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_017.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 17
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_018.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 18
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_018.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 18
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_018.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 18
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_018.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 18
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_018.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 18
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_018.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 18
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_019.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 19
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_019.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 19
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_019.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 19
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_019.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 19
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_019.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 19
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_019.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 19
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_020.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 20
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_020.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 20
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_020.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 20
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_020.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 20
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_020.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 20
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_020.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 20
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_021.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 21
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_021.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 21
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_021.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 21
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_021.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 21
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_021.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 21
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_021.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 21
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_022.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 22
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_022.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 22
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_022.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 22
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_022.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 22
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_022.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 22
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_022.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 22
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_1",
+      "path": "attention/cross/layer_1_step_023.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 23
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_3",
+      "path": "attention/cross/layer_3_step_023.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 23
+    },
+    {
+      "attention_type": "cross",
+      "dtype": "float16",
+      "layer_id": "layer_5",
+      "path": "attention/cross/layer_5_step_023.bin",
+      "shape": [
+        77,
+        24,
+        24
+      ],
+      "step": 23
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_0",
+      "path": "attention/self/layer_0_step_023.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 23
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_2",
+      "path": "attention/self/layer_2_step_023.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 23
+    },
+    {
+      "attention_type": "self",
+      "dtype": "float16",
+      "layer_id": "layer_4",
+      "path": "attention/self/layer_4_step_023.bin",
+      "shape": [
+        24,
+        24
+      ],
+      "step": 23
+    }
+  ],
+  "generator": {
+    "attention_resolution": 24,
+    "cfg_scale": 7.5,
+    "device": "cuda",
+    "dtype": "float16",
+    "height": 768,
+    "include_cross_attention": true,
+    "include_self_attention": true,
+    "layers": [
+      "*attn1*",
+      "*attn2*"
+    ],
+    "max_layers": 6,
+    "model_id": "stabilityai/stable-diffusion-xl-base-1.0",
+    "num_steps": 24,
+    "pipeline_type": "sdxl",
+    "seed": 0,
+    "self_attention_resolution": 24,
+    "width": 768
+  },
+  "images": [
+    "images/step_000.png",
+    "images/step_001.png",
+    "images/step_002.png",
+    "images/step_003.png",
+    "images/step_004.png",
+    "images/step_005.png",
+    "images/step_006.png",
+    "images/step_007.png",
+    "images/step_008.png",
+    "images/step_009.png",
+    "images/step_010.png",
+    "images/step_011.png",
+    "images/step_012.png",
+    "images/step_013.png",
+    "images/step_014.png",
+    "images/step_015.png",
+    "images/step_016.png",
+    "images/step_017.png",
+    "images/step_018.png",
+    "images/step_019.png",
+    "images/step_020.png",
+    "images/step_021.png",
+    "images/step_022.png",
+    "images/step_023.png"
+  ],
+  "layers": [
+    {
+      "attention_type": "self",
+      "id": "layer_0",
+      "processor_key": "down_blocks.1.attentions.0.transformer_blocks.0.attn1.processor"
+    },
+    {
+      "attention_type": "cross",
+      "id": "layer_1",
+      "processor_key": "down_blocks.1.attentions.0.transformer_blocks.0.attn2.processor"
+    },
+    {
+      "attention_type": "self",
+      "id": "layer_2",
+      "processor_key": "down_blocks.1.attentions.0.transformer_blocks.1.attn1.processor"
+    },
+    {
+      "attention_type": "cross",
+      "id": "layer_3",
+      "processor_key": "down_blocks.1.attentions.0.transformer_blocks.1.attn2.processor"
+    },
+    {
+      "attention_type": "self",
+      "id": "layer_4",
+      "processor_key": "down_blocks.1.attentions.1.transformer_blocks.0.attn1.processor"
+    },
+    {
+      "attention_type": "cross",
+      "id": "layer_5",
+      "processor_key": "down_blocks.1.attentions.1.transformer_blocks.0.attn2.processor"
+    }
+  ],
+  "prompt": {
+    "meaningful_token_count": 62,
+    "negative": "blurry, low quality, jpeg artifacts, overexposed, washed out colors, watermark, logo, text, deformed face, bad anatomy, extra limbs, duplicate person, distorted perspective",
+    "text": "cinematic neon-lit Japanese street at night, rain-soaked asphalt reflecting pink and cyan signs, dense Tokyo alleyway, glowing izakaya lanterns, vending machines, drifting light fog, pedestrians with umbrellas, realistic wet textures, volumetric lighting, 35mm street photography, ultra-detailed, photoreal",
+    "token_ids": [
+      49406,
+      25602,
+      13919,
+      268,
+      4350,
+      4925,
+      2012,
+      536,
+      930,
+      267,
+      2443,
+      268,
+      26592,
+      30574,
+      19700,
+      3360,
+      537,
+      1470,
+      550,
+      4659,
+      267,
+      19353,
+      6667,
+      36205,
+      923,
+      267,
+      18437,
+      2845,
+      819,
+      5917,
+      33676,
+      267,
+      29202,
+      11108,
+      267,
+      30276,
+      1395,
+      9417,
+      267,
+      33895,
+      593,
+      42782,
+      267,
+      16157,
+      6682,
+      28063,
+      267,
+      3563,
+      19950,
+      5799,
+      267,
+      274,
+      276,
+      2848,
+      2012,
+      2108,
+      267,
+      8118,
+      268,
+      12609,
+      267,
+      1153,
+      1532,
+      49407,
+      49407,
+      49407,
+      49407,
+      49407,
+      49407,
+      49407,
+      49407,
+      49407,
+      49407,
+      49407,
+      49407,
+      49407,
+      49407
+    ],
+    "tokens": [
+      "<|startoftext|>",
+      "cinematic</w>",
+      "neon</w>",
+      "-</w>",
+      "lit</w>",
+      "japanese</w>",
+      "street</w>",
+      "at</w>",
+      "night</w>",
+      ",</w>",
+      "rain</w>",
+      "-</w>",
+      "soaked</w>",
+      "asphalt</w>",
+      "reflecting</w>",
+      "pink</w>",
+      "and</w>",
+      "cy",
+      "an</w>",
+      "signs</w>",
+      ",</w>",
+      "dense</w>",
+      "tokyo</w>",
+      "alley",
+      "way</w>",
+      ",</w>",
+      "glowing</w>",
+      "iz",
+      "ak",
+      "aya</w>",
+      "lanterns</w>",
+      ",</w>",
+      "vending</w>",
+      "machines</w>",
+      ",</w>",
+      "drifting</w>",
+      "light</w>",
+      "fog</w>",
+      ",</w>",
+      "pedestrians</w>",
+      "with</w>",
+      "umbrellas</w>",
+      ",</w>",
+      "realistic</w>",
+      "wet</w>",
+      "textures</w>",
+      ",</w>",
+      "volu",
+      "metric</w>",
+      "lighting</w>",
+      ",</w>",
+      "3</w>",
+      "5</w>",
+      "mm</w>",
+      "street</w>",
+      "photography</w>",
+      ",</w>",
+      "ultra</w>",
+      "-</w>",
+      "detailed</w>",
+      ",</w>",
+      "photo",
+      "real</w>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>",
+      "<|endoftext|>"
+    ]
+  },
+  "schema_version": "1.0.0",
+  "steps": 24,
+  "timesteps": [
+    944,
+    903,
+    862,
+    821,
+    780,
+    739,
+    698,
+    657,
+    616,
+    575,
+    534,
+    493,
+    452,
+    411,
+    370,
+    329,
+    288,
+    247,
+    206,
+    165,
+    124,
+    83,
+    42,
+    1
+  ]
+}

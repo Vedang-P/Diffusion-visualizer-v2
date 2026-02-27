@@ -1,221 +1,213 @@
-# Static Diffusion Interpretability Visualizer
+# Diffulizer
 
-Production-ready two-part system for diffusion interpretability using **precomputed runs only**.
+A production-ready, interactive diffusion learning website built around two curated SDXL runs.
 
-- `data-generator/`: offline Python pipeline (GPU recommended) that runs Stable Diffusion, captures internals, computes metrics/PCA, and exports a static dataset.
-- `visualizer/`: static React + D3 app that loads exported artifacts client-side (no backend, no live inference).
+Diffulizer is a scrollytelling + playground hybrid inspired by TensorFlow Playground and Diffusion Explainer. It lets users scrub denoising steps, inspect token attention overlays, compare latent trajectories, and read synchronized metrics side-by-side.
 
-## 1. System Architecture
+## Live Concept
+
+- Title-first learning UI with centered hero: **Diffulizer**
+- Hardcoded dual-run comparison:
+  - `Realistic Run`
+  - `Anime Run`
+- Global synchronized controls:
+  - step slider
+  - play/pause loop
+  - playback speed
+  - cross-attention layer
+  - token index + token label
+  - attention opacity
+- Advanced metrics visible at every step (entropy, KL shift, cosine drift, token activation)
+
+## Architecture Overview
+
+```mermaid
+flowchart LR
+  A[Bundled Preset Data\nvisualizer/public/datasets/presets] --> B[Dataset Loader]
+  B --> C[Safe JSON Sanitizer\nNaN/Infinity -> null]
+  C --> D[Normalized Dataset State]
+  D --> E[Global Playback + Control State]
+  E --> F[Scrollytelling Sections]
+  E --> G[Attention Worker Decode]
+  G --> F
+```
+
+## Page Structure
+
+```mermaid
+flowchart TD
+  H[Hero: Diffulizer] --> I[Sticky Global Control Rail]
+  I --> S1[01 Denoising Timeline]
+  S1 --> S2[02 Attention Dynamics]
+  S2 --> S3[03 Latent Trajectory]
+  S3 --> S4[04 Synchronized Comparison]
+  S4 --> S5[05 Metric Insights]
+```
+
+## Interaction Model
+
+```mermaid
+sequenceDiagram
+  participant U as User
+  participant C as Global Controls
+  participant A as App State
+  participant W as Attention Worker
+  participant V as Visualization Sections
+
+  U->>C: Move step/token/layer sliders
+  C->>A: Update synchronized state
+  A->>W: Decode attention map request
+  W-->>A: Decoded heatmap data
+  A->>V: Re-render all sections at same step
+  V-->>U: Synced image, metrics, overlays
+```
+
+## Repository Layout
 
 ```text
-/data-generator
-  generate.py                  # Offline dataset generation entrypoint
-  validate_dataset.py          # Post-export dataset validator
-  hooks/attention_recorder.py  # UNet attention capture processors
-  metrics/analytics.py         # Metrics + PCA utilities
-  compression/serializer.py    # JSON/binary output writer
-  outputs/schema.json          # Dataset JSON schema reference
-
-/visualizer
-  src/components/              # Loaders + UI controls
-  src/visualizations/          # Timeline, attention, PCA, comparison modules
-  src/utils/                   # Dataset IO, cache, worker client
-  src/workers/                 # Float16 decode + divergence worker
-  public/datasets/default/     # Optional default static dataset mount
+Diffusion_Visualizer-main/
+  README.md
+  visualizer/
+    public/
+      datasets/presets/
+        realistic/
+          metadata.json
+          metrics.json
+          latent_pca.json
+          images/
+          attention/
+        anime/
+          metadata.json
+          metrics.json
+          latent_pca.json
+          images/
+          attention/
+    src/
+      App.jsx
+      styles.css
+      config/presets.js
+      hooks/usePlayback.js
+      components/
+        GlobalControls.jsx
+        SectionHero.jsx
+        SectionTimeline.jsx
+        SectionAttention.jsx
+        SectionTrajectory.jsx
+        SectionComparison.jsx
+        SectionInsights.jsx
+      utils/
+        datasetLoader.js
+        safeJson.js
+        tokenUtils.js
+        attentionAccess.js
+        comparison.js
+        attentionWorkerClient.js
+      workers/attentionWorker.js
+  data-generator/            # optional offline dataset generation pipeline
 ```
 
-## 2. Core Capabilities
+## Why JSON Parsing No Longer Fails
 
-### Offline generator
-- Runs Stable Diffusion locally (`diffusers`) with SD 1.x/2.x and SDXL support
-- Hooks UNet cross/self attention processors
-- Captures per-step:
-  - latent tensors
-  - predicted noise
-  - cross-attention maps
-  - self-attention maps
-- Computes:
-  - latent L2 norm
-  - latent cosine similarity to previous step
-  - attention entropy
-  - token dominance + ranking
-  - KL divergence across timestep token distributions
-  - 2D latent PCA trajectory
-- Exports compact static dataset (`float16` binaries + JSON)
+Some generated `metrics.json` files contained invalid JSON values (`NaN`, `Infinity`, `-Infinity`).
 
-### Static frontend
-- Denoising timeline with playback + latent norm curve
-- Attention explorer (token/layer selectors + heatmap overlay)
-- PCA latent trajectory with image preview
-- Comparative mode for two datasets (attention JS divergence + trajectory deltas)
-- Lazy asset loading, worker-based heavy operations, bounded caches
+Diffulizer now loads JSON as text and sanitizes invalid numeric tokens before parsing:
 
-## 3. Prerequisites
+- `NaN` -> `null`
+- `Infinity` -> `null`
+- `-Infinity` -> `null`
 
-### Generator
-- Python `>=3.10`
-- CUDA GPU recommended
-- `pip`/virtualenv
+Charts intentionally render these as **gaps** so missing measurements stay visible instead of being hidden.
 
-### Visualizer
-- Node `>=20` and npm `>=10` (see [`visualizer/.nvmrc`](visualizer/.nvmrc))
+## Tech Stack
 
-## 4. Quick Start
+- React 18
+- Vite 5
+- D3 (charts and paths)
+- Web Worker for float16 attention decode and JS divergence
 
-### A) Generate dataset offline
+## Run Locally
+
+### Prerequisites
+
+- Node.js >= 20
+- npm >= 10
+
+### Start
 
 ```bash
-cd data-generator
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-python3 generate.py \
-  --prompt "a glass teapot on a wooden table, studio lighting" \
-  --negative-prompt "blurry, low quality" \
-  --model-id "stabilityai/stable-diffusion-xl-base-1.0" \
-  --cfg-scale 7.5 \
-  --num-steps 30 \
-  --attention-resolution 32 \
-  --self-attention-resolution 32 \
-  --max-layers 12 \
-  --output-dir dataset/example_run
-```
-
-Validate exported dataset:
-
-```bash
-python3 validate_dataset.py dataset/example_run --strict
-```
-
-Default model is `stabilityai/stable-diffusion-xl-base-1.0`. For lower VRAM, you can use SD 1.5 with:
-`--model-id runwayml/stable-diffusion-v1-5 --pipeline-type sd`
-
-### B) Run visualizer
-
-```bash
-cd ../visualizer
+cd visualizer
 npm install
 npm run dev
 ```
 
-Load dataset from:
-- URL (for deployed static assets), or
-- folder selection (`metadata.json`, `metrics.json`, `latent_pca.json`, `images/`, `attention/`)
-
-### C) Optional: Generate from the website (local bridge mode)
-
-Run a local API bridge in another terminal:
-
-```bash
-cd data-generator
-source .venv/bin/activate
-python3 local_service.py
-```
-
-Then open the visualizer and use **Local Generator Bridge**:
-- enter prompt and generation settings
-- start generation
-- watch live progress bar + stage updates
-- dataset auto-loads when generation completes
-
-## 5. Generator CLI (Important Flags)
-
-| Flag | Purpose |
-| --- | --- |
-| `--prompt` | Required text prompt |
-| `--negative-prompt` | Negative prompt for CFG |
-| `--model-id` | Hugging Face model id (defaults to SDXL base) |
-| `--pipeline-type auto|sd|sdxl` | Pipeline family selector (auto infers from model id) |
-| `--cfg-scale` | Classifier-free guidance scale |
-| `--num-steps` | Diffusion timesteps |
-| `--layers` | Glob patterns for attention processors |
-| `--max-layers` | Upper bound on recorded layers |
-| `--include-cross-attention / --no-include-cross-attention` | Toggle cross-attention capture |
-| `--include-self-attention / --no-include-self-attention` | Toggle self-attention capture |
-| `--attention-resolution` | Cross-attention downsample size |
-| `--self-attention-resolution` | Self-attention pooled size |
-| `--save-latents-noise / --no-save-latents-noise` | Export or skip `latents_noise_fp16.npz` |
-| `--overwrite-output` | Replace existing non-empty output directory |
-| `--max-dataset-mb` | Size budget threshold (default `200`) |
-| `--enforce-size-limit` | Fail if dataset exceeds budget |
-| `--fail-on-shape-error` | Fail on attention shape validation errors |
-| `--device auto|cuda|cpu|mps` | Device selection |
-
-## 6. Dataset Output Contract
-
-Generated directory:
-
-```text
-dataset/<run_name>/
-  metadata.json
-  metrics.json
-  latent_pca.json
-  validation.json
-  latents_noise_fp16.npz        # optional
-  images/
-    step_000.png
-    ...
-  attention/
-    cross/
-      layer_0_step_000.bin
-      ...
-    self/
-      layer_0_step_000.bin
-      ...
-```
-
-Reference schema: [`data-generator/outputs/schema.json`](data-generator/outputs/schema.json)
-
-## 7. Frontend Build and Deploy
+Open `http://localhost:5173`.
 
 ### Production build
 
 ```bash
 cd visualizer
 npm run build
+npm run preview
 ```
 
-Static output: `visualizer/dist/`
+## Production Readiness Checklist
 
-### Vercel
-- Root directory: `visualizer`
-- Build command: `npm run build`
-- Output directory: `dist`
-- Config: [`visualizer/vercel.json`](visualizer/vercel.json)
+- Preset datasets bundled under `public/datasets/presets`
+- No runtime dependency on user-uploaded folders or local bridge services
+- NaN-safe parsing for robust loading in browsers
+- Worker-based heavy attention decode path retained
+- Sticky synchronized controls across all story sections
+- Responsive layout for desktop and mobile
+- Build verified with `npm run build`
 
-### Netlify
-- Base directory: `visualizer`
-- Build command: `npm run build`
-- Publish directory: `dist`
-- Config: [`visualizer/netlify.toml`](visualizer/netlify.toml)
+## Deployment
 
-No backend service required.
+This is a static frontend app.
 
-## 8. Production Validation Checklist
+- Build output: `visualizer/dist/`
+- Deploy to any static host (Vercel, Netlify, S3 + CDN, Cloudflare Pages)
 
-Before release:
+Existing deploy config files are included in `visualizer/`:
 
-1. Run generator and ensure `validation.json` passes.
-2. Run `python3 validate_dataset.py <dataset> --strict`.
-3. Confirm dataset size remains under target budget.
-4. Run `npm run build` and verify no build warnings/errors.
-5. Smoke test in Chrome + Firefox:
-   - timeline playback
-   - attention overlay load
-   - PCA trajectory hover/click
-   - comparative divergence for two datasets
+- `vercel.json`
+- `netlify.toml`
 
-## 9. Operational Notes
+## Optional: Regenerating Datasets
 
-- Attention assets are loaded on demand and cached with bounded size to reduce memory pressure.
-- Heavy decode/divergence work runs in a Web Worker; request timeout and crash recovery are implemented.
-- For reproducible runs, pin model revision externally if strict reproducibility is required.
-- For large runs, reduce `--num-steps`, `--max-layers`, and attention resolutions to stay within memory/size constraints.
+If you want new runs later, use `data-generator/` and then replace the two preset folders in:
 
-## 10. Troubleshooting
+- `visualizer/public/datasets/presets/realistic`
+- `visualizer/public/datasets/presets/anime`
 
-- `Output directory ... is not empty`: pass `--overwrite-output`.
-- Dataset too large: lower steps/layers/resolutions, or disable latent/noise artifact.
-- Missing cross-attention UI data: ensure generator captured cross layers (`--include-cross-attention` and layer patterns).
-- Frontend load fails for folder input: verify selected folder contains top-level `metadata.json` and referenced artifact paths.
+No frontend code changes are required as long as dataset schema remains compatible.
+
+## Troubleshooting
+
+### Blank panel or failed metrics
+
+- Confirm both preset folders contain:
+  - `metadata.json`
+  - `metrics.json`
+  - `latent_pca.json`
+  - `images/`
+  - `attention/`
+
+### App loads but attention is missing
+
+- Verify `metadata.json -> attention_files` paths point to existing `.bin` assets.
+
+### Build fails
+
+- Use Node 20+
+- Remove lockfile drift by reinstalling:
+
+```bash
+cd visualizer
+rm -rf node_modules
+npm install
+npm run build
+```
+
+---
+
+Diffulizer is designed for interpretability-first storytelling: synchronized controls, explicit missing-data semantics, and side-by-side denoising behavior that users can actually reason about.
