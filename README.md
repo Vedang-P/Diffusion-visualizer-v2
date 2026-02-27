@@ -4,10 +4,10 @@
   <img src="assets/favicon.png" alt="Diffulizer" width="120" />
 </p>
 
-Diffulizer is an interpretability-first diffusion inspection system built around **Stable Diffusion XL (SDXL Base 1.0)**.
+Diffulizer is a diffusion visualizer built around **Stable Diffusion XL (SDXL Base 1.0)**.
 It captures internal denoising traces (latents, predicted noise, cross/self-attention, token activations), serializes them into a static dataset, and renders them in a scroll-synchronized interactive viewer.
 
-The goal is to make the reverse diffusion process measurable and explainable, not just visually impressive.
+The goal is to make the reverse diffusion process measurable and explainable.
 
 ## What This Project Contains
 
@@ -17,7 +17,7 @@ The goal is to make the reverse diffusion process measurable and explainable, no
 
 ---
 
-## Diffusion Theory (Applied Here)
+## Diffusion Theory 
 
 ### 1) Forward process (training-time reference)
 A clean sample is progressively noised:
@@ -53,7 +53,7 @@ where `s = cfg_scale`.
 
 ---
 
-## End-to-End Technical Pipeline
+## Pipeline
 
 ```mermaid
 flowchart LR
@@ -92,7 +92,7 @@ Each run exports:
   attention/cross/*.bin
   attention/self/*.bin
   validation.json
-  (optional) latents_noise_fp16.npz
+  latents_noise_fp16.npz
 ```
 
 ### `metadata.json`
@@ -125,7 +125,7 @@ Core stepwise analytic channels:
 
 ---
 
-## Metric Semantics (ML Interpretation)
+## Metrics
 
 | Metric | What it measures | Typical interpretation |
 |---|---|---|
@@ -138,7 +138,7 @@ Core stepwise analytic channels:
 
 ---
 
-## Visual Diagnostics (Generated From This Repo)
+## Visuals
 
 ### Diffusion evolution strip (noise to structure)
 
@@ -270,13 +270,4 @@ Missing values render as gaps/empty points rather than crashing the app, preserv
 
 ---
 
-## Minimal Web Layer Summary
 
-The frontend is intentionally thin:
-
-- static artifact loader
-- synchronized timestep controls
-- rendering primitives for images + metric plots
-- no backend dependency for playback
-
-Most of the technical depth is in exported diffusion-state instrumentation, not UI-side post-processing.
