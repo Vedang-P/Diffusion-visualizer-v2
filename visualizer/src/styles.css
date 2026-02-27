@@ -74,6 +74,9 @@ body::-webkit-scrollbar,
 .diff-site {
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
   width: min(1300px, calc(100% - 2rem));
   margin: 0 auto;
   padding-left: max(0px, env(safe-area-inset-left));
@@ -866,6 +869,7 @@ body::-webkit-scrollbar,
   display: grid;
   align-content: center;
   gap: 1rem;
+  min-height: auto;
 }
 
 .terminology-shell {
@@ -906,28 +910,8 @@ body::-webkit-scrollbar,
     radial-gradient(circle at 74% 0%, rgba(53, 82, 140, 0.08), transparent 42%);
 }
 
-.terminology-header {
-  text-align: center;
-  margin-bottom: 0.82rem;
-}
-
-.terminology-header h2 {
-  margin: 0;
-  font-size: clamp(1.22rem, 2.35vw, 1.9rem);
-  font-weight: 560;
-  letter-spacing: 0.01em;
-}
-
-.terminology-header p {
-  margin: 0.48rem auto 0;
-  width: min(900px, 100%);
-  color: var(--muted);
-  font-size: 0.92rem;
-  line-height: 1.5;
-}
-
 .terminology-grid {
-  border-top: 1px solid rgba(177, 198, 235, 0.2);
+  border-top: 1px solid rgba(177, 198, 235, 0.16);
 }
 
 .terminology-item {
@@ -939,7 +923,7 @@ body::-webkit-scrollbar,
 }
 
 .terminology-term {
-  align-self: center;
+  align-self: start;
   color: #e6eeff;
   font-family: var(--mono);
   font-size: 0.76rem;
@@ -948,7 +932,7 @@ body::-webkit-scrollbar,
 }
 
 .terminology-meaning {
-  align-self: center;
+  align-self: start;
   color: #c8d3e9;
   font-size: 0.92rem;
   line-height: 1.55;
@@ -965,8 +949,7 @@ body::-webkit-scrollbar,
 
 .terminology-equation .katex-display {
   margin: 0.18rem 0 0.05rem;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: hidden;
   width: 100%;
   text-align: center;
 }
@@ -976,10 +959,19 @@ body::-webkit-scrollbar,
   color: #dce7ff;
 }
 
+.terminology-equation-note {
+  grid-column: 1 / -1;
+  margin: 0.08rem 0 0;
+  color: #aebdd9;
+  font-size: 0.85rem;
+  line-height: 1.52;
+  text-align: center;
+}
+
 .footer-section {
   width: min(1180px, 100%);
-  margin: 0.8rem auto 0;
-  padding: 1rem 0 1.8rem;
+  margin: auto auto 0;
+  padding: 1rem 0 max(1.8rem, env(safe-area-inset-bottom));
   display: grid;
   place-items: center;
 }
@@ -1194,6 +1186,10 @@ body::-webkit-scrollbar,
   .terminology-equation .katex {
     font-size: 0.95rem;
   }
+
+  .terminology-equation-note {
+    font-size: 0.8rem;
+  }
 }
 
 @media (max-width: 620px) {
@@ -1391,15 +1387,6 @@ body::-webkit-scrollbar,
     padding: 0.66rem 0.58rem 0.74rem;
   }
 
-  .terminology-header h2 {
-    font-size: clamp(1.08rem, 5.8vw, 1.42rem);
-  }
-
-  .terminology-header p {
-    font-size: 0.82rem;
-    line-height: 1.42;
-  }
-
   .terminology-item {
     grid-template-columns: 1fr;
     gap: 0.32rem;
@@ -1420,6 +1407,11 @@ body::-webkit-scrollbar,
 
   .terminology-equation .katex {
     font-size: 0.82rem;
+  }
+
+  .terminology-equation-note {
+    font-size: 0.74rem;
+    line-height: 1.45;
   }
 
   .footer-section {
@@ -1496,5 +1488,9 @@ body::-webkit-scrollbar,
 
   .terminology-equation .katex {
     font-size: 0.74rem;
+  }
+
+  .terminology-equation-note {
+    font-size: 0.7rem;
   }
 }

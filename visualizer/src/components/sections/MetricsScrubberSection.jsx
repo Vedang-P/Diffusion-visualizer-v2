@@ -189,7 +189,7 @@ function InspectionCard({ id, label, dataset, step, onStepChange, disabled }) {
 
       <aside className="inspection-panel">
         <div className="scrubber-block">
-          <label htmlFor={`${id}-step-scrubber`}>Step scrubber</label>
+          <label htmlFor={`${id}-step-scrubber`}>Step</label>
           <input
             id={`${id}-step-scrubber`}
             type="range"
