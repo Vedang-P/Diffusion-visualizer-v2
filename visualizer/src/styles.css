@@ -312,7 +312,7 @@ body::-webkit-scrollbar,
   justify-content: center;
 }
 
-.boot-glitch-tile {
+.boot-equation-tile {
   border: 1px solid var(--line);
   border-radius: 4px;
   padding: 0.62rem 0.84rem;
@@ -321,7 +321,7 @@ body::-webkit-scrollbar,
   overflow: hidden;
   width: fit-content;
   max-width: 100%;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .boot-tile-math {
@@ -353,89 +353,8 @@ body::-webkit-scrollbar,
   font-size: 1.12rem;
 }
 
-.boot-glitch-tile::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(200, 219, 255, 0.05) 0,
-    rgba(200, 219, 255, 0.05) 1px,
-    transparent 1px,
-    transparent 4px
-  );
-  opacity: 0;
-  z-index: 1;
-}
-
-.boot-encrypted-layer {
-  position: absolute;
-  inset: 0.62rem 0.84rem;
-  pointer-events: auto;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
-
-.encrypted-text {
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.boot-encrypted-text {
-  font-family: var(--mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  line-height: 1;
-  opacity: 0;
-  transition: opacity 0.12s linear;
-}
-
-.boot-encrypted-active {
-  color: rgba(203, 220, 255, 0.8);
-  opacity: 0.85;
-  text-shadow:
-    -1px 0 rgba(160, 197, 255, 0.44),
-    1px 0 rgba(107, 161, 255, 0.4),
-    0 0 8px rgba(93, 140, 225, 0.24);
-}
-
-.boot-encrypted-idle {
-  color: rgba(170, 194, 245, 0.1);
-  opacity: 0;
-}
-
-.boot-glitch-tile:hover {
+.boot-equation-tile:hover {
   border-color: var(--line-strong);
-  box-shadow: 0 0 0 1px rgba(171, 190, 232, 0.14) inset;
-  animation: boot-tile-jitter 0.34s steps(2, end) 2;
-}
-
-.boot-glitch-tile:hover::before {
-  animation: boot-tile-scan 0.46s steps(2, end) 2;
-}
-
-.boot-glitch-tile:hover .boot-encrypted-text {
-  color: rgba(211, 228, 255, 0.95);
-  opacity: 0.98;
-  text-shadow:
-    -1px 0 rgba(187, 214, 255, 0.68),
-    1px 0 rgba(119, 173, 255, 0.66),
-    0 0 10px rgba(86, 136, 225, 0.34);
-}
-
-.boot-glitch-variant-2:hover {
-  animation-delay: 0.04s;
-}
-
-.boot-glitch-variant-3:hover {
-  animation-delay: 0.08s;
-}
-
-.boot-glitch-variant-4:hover {
-  animation-delay: 0.12s;
 }
 
 .section-glitch {
@@ -783,73 +702,6 @@ body::-webkit-scrollbar,
   }
 }
 
-@keyframes boot-tile-jitter {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  35% {
-    transform: translateX(-1px);
-  }
-  70% {
-    transform: translateX(1px);
-  }
-}
-
-@keyframes boot-tile-scan {
-  0%,
-  100% {
-    opacity: 0;
-    transform: translateY(0);
-  }
-  40% {
-    opacity: 0.28;
-    transform: translateY(-1px);
-  }
-  80% {
-    opacity: 0.18;
-    transform: translateY(1px);
-  }
-}
-
-@keyframes boot-tile-ghost-a {
-  0%,
-  100% {
-    opacity: 0;
-    transform: translateX(0);
-    clip-path: inset(0 0 0 0);
-  }
-  42% {
-    opacity: 0.55;
-    transform: translateX(-1px);
-    clip-path: inset(12% 0 63% 0);
-  }
-  78% {
-    opacity: 0.3;
-    transform: translateX(1px);
-    clip-path: inset(66% 0 9% 0);
-  }
-}
-
-@keyframes boot-tile-ghost-b {
-  0%,
-  100% {
-    opacity: 0;
-    transform: translateX(0);
-    clip-path: inset(0 0 0 0);
-  }
-  34% {
-    opacity: 0.36;
-    transform: translateX(1px);
-    clip-path: inset(48% 0 26% 0);
-  }
-  71% {
-    opacity: 0.48;
-    transform: translateX(-1px);
-    clip-path: inset(4% 0 84% 0);
-  }
-}
-
 @keyframes boot-drift {
   from {
     background-position:
@@ -905,10 +757,6 @@ body::-webkit-scrollbar,
 
   .boot-tile-math {
     font-size: 0.92rem;
-  }
-
-  .boot-encrypted-text {
-    font-size: 0.66rem;
   }
 
   .boot-terminal-bar {
