@@ -121,8 +121,7 @@ body::-webkit-scrollbar,
   font-family: var(--mono);
 }
 
-.section-header h2,
-.metrics-visual-header h2 {
+.section-header h2 {
   margin: 0.55rem 0 0;
   font-size: clamp(1.5rem, 3.8vw, 2.7rem);
   letter-spacing: 0.01em;
@@ -616,9 +615,14 @@ body::-webkit-scrollbar,
   width: min(760px, 100%);
 }
 
-.metrics-layout {
+.metrics-card-stack {
   width: min(1080px, 100%);
   margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+.inspection-card {
   border: 1px solid var(--line-strong);
   background: var(--panel-strong);
   border-radius: 12px;
@@ -627,29 +631,45 @@ body::-webkit-scrollbar,
   grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
 }
 
-.metrics-visuals {
+.inspection-visual {
   border-right: 1px solid var(--line);
   padding: 1rem;
-}
-
-.metrics-visual-header {
-  margin-bottom: 0.8rem;
-}
-
-.metrics-frame-stack {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.7rem;
+  align-content: start;
+  gap: 0.65rem;
 }
 
-.metrics-frame-card {
+.inspection-visual-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.inspection-visual-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 540;
+  letter-spacing: 0.01em;
+  color: #eaf1ff;
+}
+
+.inspection-visual-header span {
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+}
+
+.inspection-frame-card {
   border: 1px solid var(--line);
   border-radius: 8px;
   overflow: hidden;
   background: #040506;
 }
 
-.metrics-panel {
+.inspection-panel {
   padding: 1rem;
   display: grid;
   align-content: start;
@@ -685,8 +705,108 @@ body::-webkit-scrollbar,
   font-size: 0.75rem;
 }
 
+.trend-plot-grid {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.trend-plot-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(12, 17, 25, 0.9);
+  padding: 0.58rem 0.62rem 0.65rem;
+  display: grid;
+  gap: 0.48rem;
+}
+
+.trend-plot-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.trend-plot-header p,
+.trend-plot-header span {
+  margin: 0;
+  font-family: var(--mono);
+  letter-spacing: 0.03em;
+}
+
+.trend-plot-header p {
+  color: #d9e4fb;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+}
+
+.trend-plot-header span {
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.trend-plot-svg {
+  width: 100%;
+  height: 122px;
+  display: block;
+  border: 1px solid rgba(177, 198, 235, 0.13);
+  border-radius: 6px;
+  background: rgba(6, 10, 16, 0.84);
+}
+
+.trend-grid-line {
+  stroke: rgba(185, 205, 237, 0.16);
+  stroke-width: 1;
+}
+
+.trend-grid-line-mid {
+  stroke-dasharray: 3 4;
+}
+
+.trend-guide-line {
+  stroke: rgba(226, 236, 255, 0.45);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+
+.trend-line {
+  fill: none;
+  stroke: var(--trend-color);
+  stroke-width: 2;
+  opacity: 0.92;
+}
+
+.trend-marker {
+  fill: var(--trend-color);
+  stroke: rgba(10, 16, 24, 0.9);
+  stroke-width: 1.6;
+}
+
+.trend-legend {
+  display: flex;
+  gap: 0.56rem;
+  flex-wrap: wrap;
+}
+
+.trend-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.66rem;
+}
+
+.trend-legend i {
+  width: 0.62rem;
+  height: 0.62rem;
+  border-radius: 999px;
+  background: var(--trend-color);
+  box-shadow: 0 0 8px rgba(149, 182, 255, 0.45);
+}
+
 .metric-card-grid {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.6rem;
 }
 
@@ -826,8 +946,7 @@ body::-webkit-scrollbar,
     margin-right: calc(50% - 50vw + 0.6rem);
   }
 
-  .trace-grid,
-  .metrics-frame-stack {
+  .trace-grid {
     grid-template-columns: 1fr;
   }
 
@@ -843,11 +962,11 @@ body::-webkit-scrollbar,
     white-space: normal;
   }
 
-  .metrics-layout {
+  .inspection-card {
     grid-template-columns: 1fr;
   }
 
-  .metrics-visuals {
+  .inspection-visual {
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
@@ -872,5 +991,9 @@ body::-webkit-scrollbar,
 
   .section {
     min-height: 95vh;
+  }
+
+  .metric-card-grid {
+    grid-template-columns: 1fr;
   }
 }

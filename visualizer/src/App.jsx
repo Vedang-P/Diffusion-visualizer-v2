@@ -13,10 +13,6 @@ const INITIAL_VISUAL_STATE = {
   mode: 'auto'
 };
 
-function clampStep(value, maxStep) {
-  return Math.max(0, Math.min(maxStep, Math.floor(value)));
-}
-
 export default function App() {
   const [datasets, setDatasets] = useState({});
   const [loading, setLoading] = useState(true);
@@ -225,16 +221,6 @@ export default function App() {
     return () => window.cancelAnimationFrame(frameHandle);
   }, [ready, visualState.mode, visualState.playing, maxStep, playbackVisibility]);
 
-  const setScrubStep = (nextStep) => {
-    const clamped = clampStep(nextStep, maxStep);
-    setVisualState((previous) => ({
-      ...previous,
-      step: clamped,
-      playing: false,
-      mode: 'scrub'
-    }));
-  };
-
   const step = visualState.step;
   const progress = maxStep > 0 ? step / maxStep : 0;
   const traceAFrame = ready ? getImageSrc(traceA, step) : '';
@@ -274,12 +260,9 @@ export default function App() {
         <MetricsScrubberSection
           sectionRef={metricsRef}
           ready={ready}
-          step={step}
-          maxStep={maxStep}
-          traceAFrame={traceAFrame}
-          traceBFrame={traceBFrame}
-          metricsDataset={traceA}
-          onScrubStep={setScrubStep}
+          initialStep={step}
+          realisticDataset={traceA}
+          animeDataset={traceB}
         />
       </main>
     </>
