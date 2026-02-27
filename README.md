@@ -7,8 +7,6 @@
 Diffulizer is a diffusion visualizer built around **Stable Diffusion XL (SDXL Base 1.0)**.
 It captures internal denoising traces (latents, predicted noise, cross/self-attention, token activations), serializes them into a static dataset, and renders them in a scroll-synchronized interactive viewer.
 
-The goal is to make the reverse diffusion process measurable and explainable.
-
 ## What This Project Contains
 
 - `data-generator/`: offline SD/SDXL instrumentation pipeline that exports reproducible artifacts per timestep.
