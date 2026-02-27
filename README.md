@@ -1,213 +1,282 @@
-# Diffulizer
+# Diffuliser
 
-A production-ready, interactive diffusion learning website built around two curated SDXL runs.
+<p align="center">
+  <img src="assets/favicon.png" alt="Diffuliser" width="120" />
+</p>
 
-Diffulizer is a scrollytelling + playground hybrid inspired by TensorFlow Playground and Diffusion Explainer. It lets users scrub denoising steps, inspect token attention overlays, compare latent trajectories, and read synchronized metrics side-by-side.
+Diffuliser is an interpretability-first diffusion inspection system built around **Stable Diffusion XL (SDXL Base 1.0)**.
+It captures internal denoising traces (latents, predicted noise, cross/self-attention, token activations), serializes them into a static dataset, and renders them in a scroll-synchronized interactive viewer.
 
-## Live Concept
+The goal is to make the reverse diffusion process measurable and explainable, not just visually impressive.
 
-- Title-first learning UI with centered hero: **Diffulizer**
-- Hardcoded dual-run comparison:
-  - `Realistic Run`
-  - `Anime Run`
-- Global synchronized controls:
-  - step slider
-  - play/pause loop
-  - playback speed
-  - cross-attention layer
-  - token index + token label
-  - attention opacity
-- Advanced metrics visible at every step (entropy, KL shift, cosine drift, token activation)
+## What This Project Contains
 
-## Architecture Overview
+- `data-generator/`: offline SD/SDXL instrumentation pipeline that exports reproducible artifacts per timestep.
+- `visualizer/`: React + Vite app that loads exported artifacts and lets users inspect denoising dynamics.
+- `visualizer/public/datasets/presets/{realistic,anime}`: bundled SDXL runs used by the website.
+
+---
+
+## Diffusion Theory (Applied Here)
+
+### 1) Forward process (training-time reference)
+A clean sample is progressively noised:
+
+```text
+x_t = sqrt(alpha_bar_t) * x_0 + sqrt(1 - alpha_bar_t) * epsilon,  epsilon ~ N(0, I)
+```
+
+### 2) Reverse process (inference-time process inspected in Diffuliser)
+At each timestep `t`, UNet predicts noise and scheduler updates latent state:
+
+```text
+epsilon_theta = UNet(x_t, t, c)
+x_{t-1} = SchedulerStep(x_t, epsilon_theta, t)
+```
+
+### 3) Classifier-Free Guidance (CFG)
+Diffuliser exports with CFG when `cfg_scale > 1`:
+
+```text
+epsilon_cfg = epsilon_uncond + s * (epsilon_text - epsilon_uncond)
+```
+
+where `s = cfg_scale`.
+
+### 4) What is captured per step
+- latent state `x_t`
+- predicted noise `epsilon_theta`
+- decoded image preview
+- cross-attention maps (token-conditioned spatial influence)
+- self-attention maps (spatial-spatial coupling)
+- derived trajectory and information metrics
+
+---
+
+## End-to-End Technical Pipeline
 
 ```mermaid
 flowchart LR
-  A[Bundled Preset Data\nvisualizer/public/datasets/presets] --> B[Dataset Loader]
-  B --> C[Safe JSON Sanitizer\nNaN/Infinity -> null]
-  C --> D[Normalized Dataset State]
-  D --> E[Global Playback + Control State]
-  E --> F[Scrollytelling Sections]
-  E --> G[Attention Worker Decode]
-  G --> F
-```
-
-## Page Structure
-
-```mermaid
-flowchart TD
-  H[Hero: Diffulizer] --> I[Sticky Global Control Rail]
-  I --> S1[01 Denoising Timeline]
-  S1 --> S2[02 Attention Dynamics]
-  S2 --> S3[03 Latent Trajectory]
-  S3 --> S4[04 Synchronized Comparison]
-  S4 --> S5[05 Metric Insights]
-```
-
-## Interaction Model
-
-```mermaid
-sequenceDiagram
-  participant U as User
-  participant C as Global Controls
-  participant A as App State
-  participant W as Attention Worker
-  participant V as Visualization Sections
-
-  U->>C: Move step/token/layer sliders
-  C->>A: Update synchronized state
-  A->>W: Decode attention map request
-  W-->>A: Decoded heatmap data
-  A->>V: Re-render all sections at same step
-  V-->>U: Synced image, metrics, overlays
-```
-
-## Repository Layout
-
-```text
-Diffusion_Visualizer-main/
-  README.md
-  visualizer/
-    public/
-      datasets/presets/
-        realistic/
-          metadata.json
-          metrics.json
-          latent_pca.json
-          images/
-          attention/
-        anime/
-          metadata.json
-          metrics.json
-          latent_pca.json
-          images/
-          attention/
-    src/
-      App.jsx
-      styles.css
-      config/presets.js
-      hooks/usePlayback.js
-      components/
-        GlobalControls.jsx
-        SectionHero.jsx
-        SectionTimeline.jsx
-        SectionAttention.jsx
-        SectionTrajectory.jsx
-        SectionComparison.jsx
-        SectionInsights.jsx
-      utils/
-        datasetLoader.js
-        safeJson.js
-        tokenUtils.js
-        attentionAccess.js
-        comparison.js
-        attentionWorkerClient.js
-      workers/attentionWorker.js
-  data-generator/            # optional offline dataset generation pipeline
-```
-
-## Why JSON Parsing No Longer Fails
-
-Some generated `metrics.json` files contained invalid JSON values (`NaN`, `Infinity`, `-Infinity`).
-
-Diffulizer now loads JSON as text and sanitizes invalid numeric tokens before parsing:
-
-- `NaN` -> `null`
-- `Infinity` -> `null`
-- `-Infinity` -> `null`
-
-Charts intentionally render these as **gaps** so missing measurements stay visible instead of being hidden.
-
-## Tech Stack
-
-- React 18
-- Vite 5
-- D3 (charts and paths)
-- Web Worker for float16 attention decode and JS divergence
-
-## Run Locally
-
-### Prerequisites
-
-- Node.js >= 20
-- npm >= 10
-
-### Start
-
-```bash
-cd visualizer
-npm install
-npm run dev
-```
-
-Open `http://localhost:5173`.
-
-### Production build
-
-```bash
-cd visualizer
-npm run build
-npm run preview
-```
-
-## Production Readiness Checklist
-
-- Preset datasets bundled under `public/datasets/presets`
-- No runtime dependency on user-uploaded folders or local bridge services
-- NaN-safe parsing for robust loading in browsers
-- Worker-based heavy attention decode path retained
-- Sticky synchronized controls across all story sections
-- Responsive layout for desktop and mobile
-- Build verified with `npm run build`
-
-## Deployment
-
-This is a static frontend app.
-
-- Build output: `visualizer/dist/`
-- Deploy to any static host (Vercel, Netlify, S3 + CDN, Cloudflare Pages)
-
-Existing deploy config files are included in `visualizer/`:
-
-- `vercel.json`
-- `netlify.toml`
-
-## Optional: Regenerating Datasets
-
-If you want new runs later, use `data-generator/` and then replace the two preset folders in:
-
-- `visualizer/public/datasets/presets/realistic`
-- `visualizer/public/datasets/presets/anime`
-
-No frontend code changes are required as long as dataset schema remains compatible.
-
-## Troubleshooting
-
-### Blank panel or failed metrics
-
-- Confirm both preset folders contain:
-  - `metadata.json`
-  - `metrics.json`
-  - `latent_pca.json`
-  - `images/`
-  - `attention/`
-
-### App loads but attention is missing
-
-- Verify `metadata.json -> attention_files` paths point to existing `.bin` assets.
-
-### Build fails
-
-- Use Node 20+
-- Remove lockfile drift by reinstalling:
-
-```bash
-cd visualizer
-rm -rf node_modules
-npm install
-npm run build
+  A[Prompt + SDXL config] --> B[Encode text embeddings]
+  B --> C[Initialize Gaussian latent x_T]
+  C --> D[UNet noise prediction per timestep]
+  D --> E[CFG merge: uncond/text]
+  E --> F[Scheduler update x_t -> x_t-1]
+  F --> G[Decode latent preview image]
+  D --> H[Hook attention processors]
+  H --> I[Cross/self attention tensors]
+  F --> J[Latent/Noise histories]
+  I --> K[Entropy + token activation stats]
+  J --> L[Cosine drift + latent norm + PCA]
+  K --> M[metrics.json]
+  L --> M
+  G --> N[images/step_XXX.png]
+  I --> O[attention/*.bin float16]
+  M --> P[Visualizer]
+  N --> P
+  O --> P
 ```
 
 ---
 
-Diffulizer is designed for interpretability-first storytelling: synchronized controls, explicit missing-data semantics, and side-by-side denoising behavior that users can actually reason about.
+## Exported Dataset Schema
+
+Each run exports:
+
+```text
+<run>/
+  metadata.json
+  metrics.json
+  latent_pca.json
+  images/step_000.png ...
+  attention/cross/*.bin
+  attention/self/*.bin
+  validation.json
+  (optional) latents_noise_fp16.npz
+```
+
+### `metadata.json`
+Contains generator provenance and alignment-critical fields:
+
+- model + scheduler context (`generator.*`)
+- prompt text and tokenizer outputs (`prompt.tokens`, `prompt.token_ids`)
+- timestep schedule (`timesteps`)
+- image path list (`images`)
+- recorded layer registry (`layers`)
+- binary tensor index (`attention_files`, with `path`, `shape`, `dtype`)
+
+### `metrics.json`
+Core stepwise analytic channels:
+
+- `latent_l2_norm`
+- `predicted_noise_l2_norm`
+- `cosine_similarity_to_previous`
+- `attention_kl_divergence`
+- `cross_attention_entropy`
+- `self_attention_entropy`
+- `mean_token_activation`
+- `token_dominance`
+
+### `latent_pca.json`
+2D latent trajectory embedding:
+
+- `points`: PCA projection of flattened latents by step
+- `explained_variance_ratio`: compactness of 2D approximation
+
+---
+
+## Metric Semantics (ML Interpretation)
+
+| Metric | What it measures | Typical interpretation |
+|---|---|---|
+| `latent_l2_norm` | Magnitude of latent state | Large early updates; stabilizes as structure converges |
+| `predicted_noise_l2_norm` | Magnitude of predicted residual noise | Should generally decay as denoising progresses |
+| `cosine_similarity_to_previous` | Directional similarity between consecutive latents | High values indicate smooth trajectory; drops indicate semantic reconfiguration |
+| `attention_kl_divergence` | Distribution shift in token attention between steps | Spikes indicate attention reallocation events |
+| `cross_attention_entropy` | Concentration vs dispersion of token attention over space | Lower entropy = sharper token localization |
+| `token_dominance` | Average per-token influence over the run | Identifies prompt tokens that steer generation most |
+
+---
+
+## Visual Diagnostics (Generated From This Repo)
+
+### Diffusion evolution strip (noise to structure)
+
+![Diffusion timestep strip](assets/readme/diffusion_timestep_strip.png)
+
+### Latent trajectory in PCA space
+
+![Latent PCA trajectory](assets/readme/latent_trajectory_pca.png)
+
+### Core denoising metrics over timesteps
+
+![Denoising metrics](assets/readme/denoising_metrics.png)
+
+### Token dominance (top activated prompt tokens)
+
+![Token dominance](assets/readme/token_dominance.png)
+
+---
+
+## Reproducible Setup
+
+### 1) Prerequisites
+
+- Python `>=3.10`
+- Node.js `>=20`
+- npm `>=10`
+- CUDA GPU recommended for SDXL generation
+
+### 2) Install generator dependencies
+
+```bash
+cd data-generator
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 3) Configure Hugging Face access token
+
+```bash
+export HF_TOKEN=<your_hf_token>
+```
+
+### 4) Generate an instrumented SDXL run
+
+```bash
+python generate.py \
+  --prompt "A narrow neon-lit alley at night, wet pavement reflecting lantern light, cinematic lighting." \
+  --negative-prompt "blurry, low quality, jpeg artifacts" \
+  --model-id "stabilityai/stable-diffusion-xl-base-1.0" \
+  --pipeline-type sdxl \
+  --num-steps 24 \
+  --cfg-scale 7.5 \
+  --height 768 \
+  --width 768 \
+  --max-layers 6 \
+  --attention-resolution 24 \
+  --self-attention-resolution 24 \
+  --dtype float16 \
+  --output-dir dataset/my_run \
+  --overwrite-output
+```
+
+### 5) Validate exported run
+
+```bash
+python validate_dataset.py dataset/my_run --strict
+```
+
+### 6) Wire run into visualizer presets
+
+```bash
+# example: replace one preset
+rm -rf ../visualizer/public/datasets/presets/realistic
+cp -R dataset/my_run ../visualizer/public/datasets/presets/realistic
+```
+
+### 7) Run the viewer
+
+```bash
+cd ../visualizer
+npm install
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+## Generator Controls That Matter Most
+
+- `--num-steps`: temporal resolution of denoising trace.
+- `--cfg-scale`: conditioning strength vs diversity.
+- `--max-layers`: attention capture breadth (affects size and speed).
+- `--attention-resolution`, `--self-attention-resolution`: spatial size of exported maps.
+- `--dtype`: `float16` reduces storage and transfer cost.
+- `--max-dataset-mb` + `--enforce-size-limit`: hard budget controls for artifact size.
+
+---
+
+## Compute Notes (SDXL)
+
+Recommended for practical throughput:
+
+- GPU: NVIDIA 12GB+ VRAM (16GB preferred for higher headroom)
+- Dtype: `float16`
+- For constrained hardware, reduce:
+  - `--num-steps`
+  - `--max-layers`
+  - attention resolutions
+  - image resolution (`--height`, `--width`)
+
+---
+
+## Data Integrity Guarantees in Viewer
+
+The viewer sanitizes invalid JSON numeric tokens during load:
+
+- `NaN -> null`
+- `Infinity -> null`
+- `-Infinity -> null`
+
+Missing values render as gaps/empty points rather than crashing the app, preserving trace continuity under imperfect exports.
+
+---
+
+## Minimal Web Layer Summary
+
+The frontend is intentionally thin:
+
+- static artifact loader
+- synchronized timestep controls
+- rendering primitives for images + metric plots
+- no backend dependency for playback
+
+Most of the technical depth is in exported diffusion-state instrumentation, not UI-side post-processing.

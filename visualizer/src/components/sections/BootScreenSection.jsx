@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { InlineMath } from 'react-katex';
 import HyperText from '../ui/HyperText';
 import WebcamPixelGrid from '../ui/WebcamPixelGrid';
@@ -18,6 +19,40 @@ const BOOT_EQUATIONS = [
 ];
 
 export default function BootScreenSection() {
+  const [enableWebcamGrid, setEnableWebcamGrid] = useState(true);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') {
+      return undefined;
+    }
+
+    const coarseOrSmallQuery = window.matchMedia('(max-width: 768px), (pointer: coarse)');
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const update = () => {
+      setEnableWebcamGrid(!(coarseOrSmallQuery.matches || reducedMotionQuery.matches));
+    };
+
+    update();
+    if (typeof coarseOrSmallQuery.addEventListener === 'function') {
+      coarseOrSmallQuery.addEventListener('change', update);
+      reducedMotionQuery.addEventListener('change', update);
+    } else {
+      coarseOrSmallQuery.addListener(update);
+      reducedMotionQuery.addListener(update);
+    }
+
+    return () => {
+      if (typeof coarseOrSmallQuery.removeEventListener === 'function') {
+        coarseOrSmallQuery.removeEventListener('change', update);
+        reducedMotionQuery.removeEventListener('change', update);
+      } else {
+        coarseOrSmallQuery.removeListener(update);
+        reducedMotionQuery.removeListener(update);
+      }
+    };
+  }, []);
+
   return (
     <section className="section section-boot">
       <div className="boot-shell">
@@ -47,6 +82,7 @@ export default function BootScreenSection() {
               borderColor="#ffffff"
               borderOpacity={0.06}
               className="boot-webcam-grid"
+              active={enableWebcamGrid}
               showFallbackMessage={false}
             />
           </div>
