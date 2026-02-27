@@ -65,12 +65,15 @@ export default function MetricsScrubberSection({
 
   return (
     <section ref={sectionRef} className="section section-metrics">
+      <div className="section-header section-header-metrics">
+        <h2>From Noise to Structure.</h2>
+        <p className="section-playback-subtext section-metrics-subtext">
+          Move through the reverse diffusion process and observe how global layout forms before fine detail is refined.
+        </p>
+      </div>
+
       <div className="metrics-layout">
         <div className="metrics-visuals">
-          <div className="metrics-visual-header">
-            <p className="section-overline">Interactive Inspection</p>
-            <h2>Scrub timesteps to inspect trace behavior.</h2>
-          </div>
           <div className="metrics-frame-stack">
             <div className="metrics-frame-card">{traceAFrame ? <FrameCanvas src={traceAFrame} alt={`Trace A at step ${step}`} /> : null}</div>
             <div className="metrics-frame-card">{traceBFrame ? <FrameCanvas src={traceBFrame} alt={`Trace B at step ${step}`} /> : null}</div>

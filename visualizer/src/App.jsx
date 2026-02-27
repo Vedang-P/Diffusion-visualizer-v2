@@ -27,6 +27,7 @@ export default function App() {
 
   const playbackRef = useRef(null);
   const metricsRef = useRef(null);
+  const stepRef = useRef(INITIAL_VISUAL_STATE.step);
 
   useEffect(() => {
     let cancelled = false;
@@ -153,6 +154,10 @@ export default function App() {
   }, [metricsVisibility, playbackVisibility]);
 
   useEffect(() => {
+    stepRef.current = visualState.step;
+  }, [visualState.step]);
+
+  useEffect(() => {
     if (!ready || !visualState.playing || visualState.mode !== 'auto' || maxStep <= 0) {
       return undefined;
     }
@@ -160,21 +165,57 @@ export default function App() {
     let frameHandle = 0;
     let last = window.performance.now();
     let accumulator = 0;
+    let finalHoldMs = 0;
+    const FINAL_STEP_HOLD_MS = 5000;
 
     const animate = (now) => {
       const delta = now - last;
       last = now;
-      accumulator += delta;
 
+      const currentStep = stepRef.current;
+      if (currentStep >= maxStep) {
+        finalHoldMs += delta;
+        if (finalHoldMs >= FINAL_STEP_HOLD_MS) {
+          finalHoldMs = 0;
+          accumulator = 0;
+          stepRef.current = 0;
+          setVisualState((previous) => {
+            if (previous.step === 0) {
+              return previous;
+            }
+            return {
+              ...previous,
+              step: 0
+            };
+          });
+        }
+        frameHandle = window.requestAnimationFrame(animate);
+        return;
+      }
+
+      finalHoldMs = 0;
+      accumulator += delta;
       const speedFactor = 0.7 + playbackVisibility * 2.6;
-      const frameDurationMs = Math.max(24, 130 / speedFactor);
+      const frameDurationMs = Math.max(96, 520 / speedFactor);
       if (accumulator >= frameDurationMs) {
         const advances = Math.floor(accumulator / frameDurationMs);
         accumulator %= frameDurationMs;
-        setVisualState((previous) => ({
-          ...previous,
-          step: (previous.step + advances) % (maxStep + 1)
-        }));
+        const nextStep = Math.min(maxStep, currentStep + advances);
+        if (nextStep !== currentStep) {
+          stepRef.current = nextStep;
+          setVisualState((previous) => {
+            if (previous.step === nextStep) {
+              return previous;
+            }
+            return {
+              ...previous,
+              step: nextStep
+            };
+          });
+          if (nextStep === maxStep) {
+            accumulator = 0;
+          }
+        }
       }
 
       frameHandle = window.requestAnimationFrame(animate);

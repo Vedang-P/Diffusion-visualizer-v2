@@ -129,6 +129,19 @@ body::-webkit-scrollbar,
   font-weight: 560;
 }
 
+.section-header-playback,
+.section-header-metrics {
+  text-align: center;
+}
+
+.section-playback-subtext {
+  margin: 0.65rem auto 0;
+  width: min(820px, 100%);
+  color: var(--muted);
+  font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+  line-height: 1.5;
+}
+
 .status-line {
   margin: 0.8rem 0 0;
   font-family: var(--mono);
@@ -433,6 +446,74 @@ body::-webkit-scrollbar,
   gap: 1rem;
 }
 
+.playback-prompt-terminal,
+.trace-grid {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+}
+
+.playback-prompt-terminal {
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: rgba(7, 10, 15, 0.94);
+  overflow: hidden;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+
+.playback-prompt-terminal-bar {
+  height: 36px;
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0 0.8rem;
+  background: rgba(12, 17, 25, 0.95);
+}
+
+.playback-prompt-terminal-bar p {
+  margin: 0;
+  text-align: center;
+  color: #a5b3cd;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+}
+
+.playback-prompt-spacer {
+  width: 44px;
+  height: 1px;
+}
+
+.playback-prompt-terminal-body {
+  padding: 0.65rem 0.8rem 0.72rem;
+  display: grid;
+  gap: 0.42rem;
+  background:
+    linear-gradient(180deg, rgba(7, 11, 18, 0.92), rgba(5, 8, 14, 0.98)),
+    radial-gradient(circle at 80% 0%, rgba(63, 93, 148, 0.09), transparent 45%);
+}
+
+.playback-prompt-command,
+.playback-prompt-output {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.79rem;
+  line-height: 1.45;
+}
+
+.playback-prompt-command {
+  color: #92a4c7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playback-prompt-output {
+  color: #dce7fd;
+}
+
 .trace-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -447,24 +528,28 @@ body::-webkit-scrollbar,
 }
 
 .trace-panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin-bottom: 0.62rem;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  gap: 0.2rem;
+  margin-bottom: 0.72rem;
+  text-align: center;
 }
 
 .trace-panel-header h3 {
   margin: 0;
-  font-size: 0.9rem;
-  font-weight: 560;
+  font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+  font-weight: 500;
+  font-family: "Anthropic Sans", "Avenir Next", Inter, "Segoe UI", sans-serif;
+  letter-spacing: 0.01em;
+  color: #e7efff;
 }
 
 .trace-panel-header span {
   margin: 0;
   color: var(--muted);
   font-family: var(--mono);
-  font-size: 0.73rem;
+  font-size: 0.78rem;
 }
 
 .trace-panel-frame {
@@ -496,7 +581,7 @@ body::-webkit-scrollbar,
 
 .timeline-track {
   border: 1px solid var(--line);
-  background: rgba(12, 16, 22, 0.9);
+  background: rgba(7, 18, 12, 0.82);
   border-radius: 999px;
   height: 8px;
   overflow: hidden;
@@ -506,24 +591,34 @@ body::-webkit-scrollbar,
   width: 100%;
   height: 100%;
   transform-origin: left center;
-  background: linear-gradient(90deg, rgba(184, 200, 235, 0.45), rgba(198, 216, 255, 0.88));
+  background: linear-gradient(90deg, #4be07f, #2acb67 55%, #16a34a);
+  box-shadow: 0 0 12px rgba(56, 220, 112, 0.35);
+  transition: transform 120ms linear;
 }
 
 .timeline-readout p {
   margin: 0.45rem 0 0;
   text-align: center;
   color: var(--muted);
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.05em;
+  font-family: "Anthropic Sans", "Avenir Next", Inter, "Segoe UI", sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .section-metrics {
   display: grid;
   align-content: center;
+  gap: 1rem;
+}
+
+.section-metrics-subtext {
+  width: min(760px, 100%);
 }
 
 .metrics-layout {
+  width: min(1080px, 100%);
+  margin: 0 auto;
   border: 1px solid var(--line-strong);
   background: var(--panel-strong);
   border-radius: 12px;
@@ -734,6 +829,18 @@ body::-webkit-scrollbar,
   .trace-grid,
   .metrics-frame-stack {
     grid-template-columns: 1fr;
+  }
+
+  .playback-prompt-terminal {
+    border-radius: 8px;
+  }
+
+  .playback-prompt-terminal-body {
+    padding: 0.58rem 0.68rem 0.64rem;
+  }
+
+  .playback-prompt-output {
+    white-space: normal;
   }
 
   .metrics-layout {
